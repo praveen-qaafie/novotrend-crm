@@ -1,68 +1,33 @@
-const ALGORITHM = "AES-CBC";
-let cachedKey = null;
+import CryptoJS from "crypto-js";
 
-async function getKey() {
-  if (cachedKey) {
-    // console.log("Using cached key==>", cachedKey)
-    return cachedKey;
-  }
+export function encryptPayload(text) {
+  const stringifiedData = JSON.stringify(text);
+  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPT_KEY);
+  const iv = CryptoJS.lib.WordArray.random(16);
 
-  const envKey = import.meta.env.VITE_API_ENCRYPTION_KEY;
-  const rawKey = Uint8Array.from(atob(envKey), (c) => c.charCodeAt(0));
+  const encrypted = CryptoJS.AES.encrypt(stringifiedData, key, {
+    iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
 
-  cachedKey = await crypto.subtle.importKey(
-    "raw",
-    rawKey,
-    { name: ALGORITHM },
-    false,
-    ["encrypt", "decrypt"],
-  );
+  const cipherText = CryptoJS.enc.Base64.stringify(encrypted.ciphertext);
+  const ivBase64 = CryptoJS.enc.Base64.stringify(iv);
 
-  // console.log("New key created:", cachedKey)
-  return cachedKey;
+  return btoa(`${cipherText}::${ivBase64}`);
 }
 
-export async function encryptPayload(data) {
-  const key = await getKey();
-  const iv = crypto.getRandomValues(new Uint8Array(16));
-  const encoded = new TextEncoder().encode(JSON.stringify(data));
+export function decryptResponse(encryptedText) {
+  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPT_KEY);
 
-  const encrypted = await crypto.subtle.encrypt(
-    { name: ALGORITHM, iv },
-    key,
-    encoded,
-  );
+  const decoded = atob(encryptedText);
+  const [cipherText, iv] = decoded.split("::");
+  const newData = { ciphertext: CryptoJS.enc.Base64.parse(cipherText) };
+  const decrypted = CryptoJS.AES.decrypt(newData, key, {
+    iv: CryptoJS.enc.Base64.parse(iv),
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
 
-  const combined = new Uint8Array(iv.byteLength + encrypted.byteLength);
-  combined.set(iv, 0);
-  combined.set(new Uint8Array(encrypted), iv.byteLength);
-
-  // hasing without special character
-  return Array.from(combined)
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-export async function decryptResponse(encryptedText) {
-  const key = await getKey();
-
-  // Hex → Uint8Array
-  const combined = new Uint8Array(
-    encryptedText.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
-  );
-
-  const iv = combined.slice(0, 16);
-  const ciphertext = combined.slice(16);
-
-  try {
-    const decrypted = await crypto.subtle.decrypt(
-      { name: ALGORITHM, iv },
-      key,
-      ciphertext,
-    );
-    return JSON.parse(new TextDecoder().decode(decrypted));
-  } catch (err) {
-    console.error("Decryption failed:", err);
-    throw err;
-  }
+  return decrypted.toString(CryptoJS.enc.Utf8);
 }

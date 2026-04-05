@@ -18,10 +18,14 @@ import {
 } from "../../utils/userRegistrationValidation";
 import api from "../../utils/axiosInstance";
 import { AUTH_API } from "../../utils/constants";
+import { decryptResponse } from "../../utils/crypto";
 
 const AuthPage = ({ isLogin = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  console.log(decryptResponse('VDJKTjZsWEVLWmtTcWZnVXJ1Y0hWckZpbE9VOGF5U2VRbitBYTE4QVFNQWptMmx6Q1hNb29oQU1oaW5waDBGM2VpVVRrNXYwbWpoYnV5WXhYYng4SzMrTmNVdGs2Smd0Ukc5RENCTkNEdHo3M3E2Y2dOc000NXZOSUdZTkUwdlFaYStHK2VsZk11VDFuMW5qc21raUR3PT06OnJFSE8vVWRicXpPdUM0VUVTODVwMmc9PQ=='))
+
   const user = localStorage.getItem("UserLogedIn") || false;
   const { partnerCode } = useParams();
   const [loginTabActive, setLoginTabActive] = useState(isLogin);

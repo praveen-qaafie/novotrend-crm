@@ -2,7 +2,7 @@ import axios from "axios";
 import { encryptPayload, decryptResponse } from "./crypto";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://ntapi.novotrend.co/member/login/login.php",
   // headers: { "Content-Type": "application/json" },
 });
 
@@ -11,7 +11,6 @@ api.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("userToken");
 
-  
     if (token) {
       config.data = {
         ...config.data,
@@ -21,8 +20,6 @@ api.interceptors.request.use(
 
     if (config.data) {
       const encrypted = await encryptPayload(config.data);
-      console.log("data", config.data)
-      console.log("encrypted", encrypted);
       config.data = { data: encrypted };
     }
 
@@ -34,12 +31,10 @@ api.interceptors.request.use(
 // Response Interceptor
 api.interceptors.response.use(
   async (response) => {
-    console.log("Raw response.data:", response.data);
-    console.log("response.data.data:", response.data?.data);
-    console.log("typeof:", typeof response.data?.data);
-    if (response.data?.data) {
-      response.data = await decryptResponse(response.data.data);
-    }
+    const decryptedData = decryptResponse(response?.data);
+    const parsedData = JSON.parse(decryptedData);
+
+    //  Praveen Return the Parsed Data instead of response. Check the console
     return response;
   },
   (error) => {
@@ -53,7 +48,7 @@ api.interceptors.response.use(
 
 export default api;
 
-// token 
+// token
 // api.interceptors.request.use((config) => {
 //   const token = localStorage.getItem("userToken");
 //   if (!token) return config;
