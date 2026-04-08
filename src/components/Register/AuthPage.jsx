@@ -18,13 +18,13 @@ import {
 } from "../../utils/userRegistrationValidation";
 import api from "../../utils/axiosInstance";
 import { AUTH_API } from "../../utils/constants";
-import { decryptResponse } from "../../utils/crypto";
+import useCountry from "../../hooks/useCountry";
 
 const AuthPage = ({ isLogin = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(decryptResponse('VDJKTjZsWEVLWmtTcWZnVXJ1Y0hWckZpbE9VOGF5U2VRbitBYTE4QVFNQWptMmx6Q1hNb29oQU1oaW5waDBGM2VpVVRrNXYwbWpoYnV5WXhYYng4SzMrTmNVdGs2Smd0Ukc5RENCTkNEdHo3M3E2Y2dOc000NXZOSUdZTkUwdlFaYStHK2VsZk11VDFuMW5qc21raUR3PT06OnJFSE8vVWRicXpPdUM0VUVTODVwMmc9PQ=='))
+  const { data: countries = [] } = useCountry();
 
   const user = localStorage.getItem("UserLogedIn") || false;
   const { partnerCode } = useParams();
@@ -43,11 +43,10 @@ const AuthPage = ({ isLogin = true }) => {
     password: "",
   });
 
-  const [countryArray, setCountryArray] = useState([]);
-
   const [registerInputFields, setRegisterInputFields] = useState({
     email: location.state?.email || "",
     password: "",
+    confirmPassword: "",
     firstname: "",
     lastname: "",
     country: "",
@@ -93,7 +92,7 @@ const AuthPage = ({ isLogin = true }) => {
     setResponseError("");
   };
 
-  // login submit
+  // login handler
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -106,36 +105,37 @@ const AuthPage = ({ isLogin = true }) => {
 
     try {
       const user = await userLogin(loginInputField);
-      setResponseError(user);
-      if (user?.status === 200) {
-        const authType = Number(user?.response?.auth_type);
-        const token = user?.response?.token;
 
-        if (token) {
-          localStorage.setItem("userToken", token);
-        }
+      // handle both cases
+      const apiData = user?.data || user;
+      setResponseError(apiData);
+      if (apiData?.status === 200) {
+        const authType = Number(apiData?.authType ?? 0);
 
         if (authType === 0) {
-          toast.success(user.result, toastOptions);
+          toast.success(apiData?.result || "Login successful", toastOptions);
           localStorage.setItem("UserLogedIn", true);
           navigate("/dashboard");
         } else if (authType === 1) {
           toast.success("OTP sent successfully", toastOptions);
           navigate("/emailVerify");
         } else {
-          toast.error("Unknown authentication type received", toastOptions);
+          // fallback safety
+          toast.success(apiData?.result || "Login success", toastOptions);
+          navigate("/dashboard");
         }
       } else if (
-        user?.status === 400 &&
-        user?.result?.toLowerCase().includes("email is not verify")
+        apiData?.status === 400 &&
+        apiData?.result?.toLowerCase().includes("email is not verify")
       ) {
-        if (user?.response?.token) {
-          localStorage.setItem("userToken", user.response.token);
+        if (apiData?.response?.token) {
+          localStorage.setItem("userToken", apiData.response.token);
         }
-        navigate("/emailVerify");
+
         toast.info("Please verify your Email", toastOptions);
+        navigate("/emailVerify");
       } else {
-        toast.error(user?.result || "Login failed", toastOptions);
+        toast.error(apiData?.result || "Login failed !!", toastOptions);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -175,7 +175,7 @@ const AuthPage = ({ isLogin = true }) => {
 
     // Country selection logic
     if (name === "country") {
-      const countryID = countryArray.find(
+      const countryID = countries?.find(
         (country) => country.country_name === value,
       );
       if (countryID) {
@@ -186,9 +186,26 @@ const AuthPage = ({ isLogin = true }) => {
         }));
       }
     }
+
+    // Password match validation
+    if (name === "password" || name === "confirmPassword") {
+      const password =
+        name === "password" ? value : registerInputFields.password;
+
+      const confirmPassword =
+        name === "confirmPassword"
+          ? value
+          : registerInputFields.confirmPassword;
+
+      if (confirmPassword && password !== confirmPassword) {
+        setPasswordMatchError("Passwords do not match");
+      } else {
+        setPasswordMatchError("");
+      }
+    }
   };
 
-  // handle registerr API
+  // register handler
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
 
@@ -208,38 +225,43 @@ const AuthPage = ({ isLogin = true }) => {
       password: registerInputFields.password,
       first_name: registerInputFields.firstname,
       last_name: registerInputFields.lastname,
+      cpassword: registerInputFields.confirmPassword,
       country_id: registerInputFields.country_id,
       mobileno: registerInputFields.mobileNumber,
-      inputChecked: registerInputFields.inputChecked,
-      partnerCode: registerInputFields.partnerCode || "",
+      inputchecked: registerInputFields.inputChecked,
+      partnercode: registerInputFields.partnerCode || "",
     };
+
+    if (registerInputFields.password !== registerInputFields.confirmPassword) {
+      setPasswordMatchError("Passwords do not match");
+      return;
+    }
 
     try {
       const registerResp = await api.post(`${AUTH_API.REGISTER}`, body);
       const responseData = registerResp?.data?.data;
 
-      if (responseData?.status === 200) {
-        const token = responseData?.response?.token;
-        setIsLoading(false);
-        if (token) localStorage.setItem("userToken", token);
+      // console.log("responseData==>", responseData);
 
-        if (responseData?.response?.email_verify === 0) {
-          toast.success(responseData.result, toastOptions);
-          toast.success("OTP sent successfully", toastOptions);
+      if (responseData?.status === 200) {
+
+        setIsLoading(false);
+        if (responseData?.status === 200) {
+          const token = responseData?.response?.token || responseData?.response;
+
+          toast.success(
+            "Registration successful. Please verify your email.",
+            toastOptions,
+          );
+
           localStorage.setItem(
             "UserInfo",
             JSON.stringify(responseData?.response),
           );
-          navigate("/emailVerify");
-        } else if (responseData?.response?.email_verify === 1) {
-          localStorage.setItem("UserLogedIn", true);
-          localStorage.setItem(
-            "UserInfo",
-            JSON.stringify(responseData?.response),
-          );
-          navigate("/dashboard");
-        } else {
-          toast.error("Unknown registration state received", toastOptions);
+
+          navigate("/emailVerify", {
+            state: { token },
+          });
         }
       } else {
         setIsLoading(false);
@@ -255,20 +277,6 @@ const AuthPage = ({ isLogin = true }) => {
       console.error(err);
     }
   };
-
-  // get Country
-  // const getCountry = async () => {
-  //   try {
-  //     const countryData = await api.get(`${AUTH_API.GET_COUNTRY}`);
-  //     setCountryArray(countryData.data.data);
-  //   } catch (error) {
-  //     console.error("Login error:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getCountry();
-  // }, []);
 
   useEffect(() => {
     if (partnerCode) {
@@ -457,7 +465,7 @@ const AuthPage = ({ isLogin = true }) => {
                           <option value="" disabled hidden>
                             Choose your Country
                           </option>
-                          {countryArray?.map((elem, index) => (
+                          {countries?.map((elem, index) => (
                             <option key={index} value={elem.country_name}>
                               {elem.country_name}
                             </option>
@@ -600,10 +608,10 @@ const AuthPage = ({ isLogin = true }) => {
                       )}
                     </div>
 
-                    {/* Password */}
+                    {/* password */}
                     <div className="mb-4">
                       <label className="block text-sm font-medium mb-1">
-                        Your Password
+                        Password
                       </label>
                       <div className="flex items-center border-2 hover:border-blue-500 focus-within:border-blue-700 rounded px-3 py-2 space-x-2 w-full">
                         <RiLockPasswordLine className="text-blue-600 w-6 h-6" />
@@ -636,6 +644,50 @@ const AuthPage = ({ isLogin = true }) => {
                         </span>
                       )}
                     </div>
+
+                    {/* confirm password  */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium mb-1">
+                        Confirm Password
+                      </label>
+                      <div className="flex items-center border-2 hover:border-blue-500 focus-within:border-blue-700 rounded px-3 py-2 space-x-2 w-full">
+                        <RiLockPasswordLine className="text-blue-600 w-6 h-6" />
+                        <input
+                          placeholder="********"
+                          type={showPassword ? "text" : "password"}
+                          className="outline-none w-full text-sm"
+                          value={registerInputFields.confirmPassword}
+                          onChange={handleInputChangeRegister}
+                          name="confirmPassword"
+                          required
+                          autoComplete="new-password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="focus:outline-none"
+                        >
+                          {showPassword ? (
+                            <FaEye className="w-5 h-5 text-gray-600" />
+                          ) : (
+                            <FaEyeSlash className="w-5 h-5 text-gray-600" />
+                          )}
+                        </button>
+                      </div>
+                      {fieldErrors.confirmPassword && (
+                        <span className="text-red-500 text-sm">
+                          {fieldErrors.confirmPassword}
+                        </span>
+                      )}
+
+                      {/* Show error if passwords don't match */}
+                      {passwordMatchError && (
+                        <p className="text-red-600 text-sm my-1">
+                          {passwordMatchError}
+                        </p>
+                      )}
+                    </div>
+
                     {/* Password Rules */}
                     <ul className="text-xs text-gray-500 space-y-1 pl-4 mb-4">
                       <li
@@ -663,13 +715,6 @@ const AuthPage = ({ isLogin = true }) => {
                         ○ At least one special character
                       </li>
                     </ul>
-
-                    {/* Show error if passwords don't match */}
-                    {passwordMatchError && (
-                      <p className="text-red-600 text-sm my-1">
-                        {passwordMatchError}
-                      </p>
-                    )}
 
                     {/* Partner Code */}
                     <div className="mb-4">

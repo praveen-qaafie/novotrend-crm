@@ -1,13 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import ClientReportTable from "../../../components/Common/ClientReportTable";
 import { PARTNER_DASHBOARD } from "../../../utils/constants";
 import api from "../../../utils/axiosInstance";
 
 export default function ClientReport() {
-  const backendURL = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("userToken");
-
   const [reportsClientData, setReportsClientData] = useState([]);
 
   const fetchClientsReportsData = useCallback(async () => {
@@ -18,9 +14,8 @@ export default function ClientReport() {
       setReportsClientData(response.data.data.response);
     } catch (err) {
       console.error(err);
-    } finally {
     }
-  }, [backendURL, token]);
+  }, []);
 
   useEffect(() => {
     fetchClientsReportsData();

@@ -11,12 +11,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import { validateUserFields } from "../utils/ProfilePersonalValidation";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
+import useCountry from "../hooks/useCountry";
 
 export const Settings = () => {
   const navigate = useNavigate();
+  const { data: countries = [] } = useCountry();
+
   const { toggle, isMobile, setToggle } = useSidebar();
   const { formatDate, toastOptions, fetchUserData } = useUserContext();
-  const [countryArray, setCountryArray] = useState([]);
   const [inputOtp, setInputOtp] = useState("");
   const [inputFields, setInputFields] = useState({
     firstName: "",
@@ -97,24 +99,17 @@ export const Settings = () => {
     }
   };
 
-  // const getCountry = async () => {
-  //   try {
-  //     const countryData = await api.get(`${USER_API.GET_COUNTERY}`);
-  //     setCountryArray(countryData.data.data);
-  //   } catch (error) {
-  //     console.error("Error fetching countries:", error);
-  //   }
-  // };
-
   const getUser = async () => {
     try {
       setIsUserLoading(true);
       const userResponse = await api.post(`${USER_API.GET_USER_DATA}`);
       if (userResponse.data.data.status === 200) {
         const userData = userResponse.data.data.response;
-        const userCountry = countryArray.find(
-          (country) => country.country_id === userData.user_country,
-        );
+        const userCountry =
+          countries.find(
+            (country) =>
+              String(country.country_id) === String(userData.user_country),
+          ) || {};
 
         const userFields = {
           firstName: userData.first_name || "",
@@ -163,21 +158,16 @@ export const Settings = () => {
     return false;
   };
 
-  // useEffect(() => {
-  //   getCountry();
-  // }, []);
-
   useEffect(() => {
-    if (countryArray.length > 0) {
+    if (countries.length > 0) {
       getUser();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryArray]);
+  }, [countries]);
 
   const handleMobileChange = (e) => {
     const { name, value } = e.target;
     if (name === "country") {
-      const selectedCountry = countryArray.find(
+      const selectedCountry = countries.find(
         (country) => country.country_name === value,
       );
       setInputFields((prev) => ({
@@ -237,9 +227,9 @@ export const Settings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // Validate before submitting
     const validationErrors = validateUserFields(inputFields, userImage);
+    // console.log("validationErrors", validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -672,7 +662,7 @@ export const Settings = () => {
                     className="w-full bg-transparent border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-input-border"
                   >
                     <option value="">Select a country</option>
-                    {countryArray.map((country) => (
+                    {countries.map((country) => (
                       <option
                         key={country.country_id}
                         value={country.country_name}

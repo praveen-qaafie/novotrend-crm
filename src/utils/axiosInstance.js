@@ -2,8 +2,7 @@ import axios from "axios";
 import { encryptPayload, decryptResponse } from "./crypto";
 
 const api = axios.create({
-  baseURL: "https://ntapi.novotrend.co/member/login/login.php",
-  // headers: { "Content-Type": "application/json" },
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Request Interceptor
@@ -28,14 +27,19 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Response Interceptor
 api.interceptors.response.use(
   async (response) => {
-    const decryptedData = decryptResponse(response?.data);
-    const parsedData = JSON.parse(decryptedData);
+    try {
+      const decrypted = decryptResponse(response?.data);
+      const parsedData = JSON.parse(decrypted);
+      // console.log("parsedData", parsedData)
+      response.data = parsedData;
 
-    //  Praveen Return the Parsed Data instead of response. Check the console
-    return response;
+      return response;
+    } catch (err) {
+      console.error("Decryption failed:", err);
+      return response;
+    }
   },
   (error) => {
     if (error.response?.status === 401) {
@@ -47,34 +51,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// token
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("userToken");
-//   if (!token) return config;
-
-//   //  GET request
-//   if (config.method === "get") {
-//     config.params = {
-//       ...config.params,
-//       token,
-//     };
-//   }
-//   //  FormData
-//   else if (config.data instanceof FormData) {
-//     config.data.append("token", token);
-//   }
-//   //  JSON
-//   else if (config.data && typeof config.data === "object") {
-//     config.data = {
-//       ...config.data,
-//       token,
-//     };
-//   }
-//   //  No data
-//   else {
-//     config.data = { token };
-//   }
-
-//   return config;
-// });

@@ -5,16 +5,12 @@ import {
   PartnerDashboardSection,
   PartnerLoyaltyProgram,
 } from "./PartnerDashobard";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/userContext";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
-const backendURL = import.meta.env.VITE_API_URL;
-
 function PartherDashboard() {
-  const token = localStorage.getItem("userToken");
   const [userData, setuserData] = useState();
   const [loading, setLoading] = useState(false);
   const { toastOptions } = useUserContext();
@@ -38,7 +34,7 @@ function PartherDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [backendURL, token, toastOptions, setuserData]);
+  }, [toastOptions, setuserData]);
 
   useEffect(() => {
     getIbDashboard();

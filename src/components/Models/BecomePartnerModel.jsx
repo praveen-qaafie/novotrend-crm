@@ -84,5 +84,4 @@ const BecomePartnerModal = ({ onClose }) => {
     </div>
   );
 };
-
 export default BecomePartnerModal;

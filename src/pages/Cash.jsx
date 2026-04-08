@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Hr } from "../components/Common/Hr";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/userContext";
 import { useSidebar } from "../context/SidebarContext";
@@ -11,7 +10,6 @@ import api from "../utils/axiosInstance";
 // import HundredBonusTerms from "./Terms&condition/HundredBonusTerms ";
 // import FiftyBonusTerms from "./Terms&condition/FiftyBonusTerms ";
 
-const backendURL = import.meta.env.VITE_API_URL;
 
 export const Cash = () => {
   const navigate = useNavigate();

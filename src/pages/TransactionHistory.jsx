@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from "react";
-// import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import DatePicker from "react-datepicker";
@@ -16,14 +15,12 @@ import TransactionTableWithdrawal from "../components/TransactionHistoryTables/W
 import Transfer from "../components/TransactionHistoryTables/Transfer";
 import { FiLoader } from "react-icons/fi";
 import api from "../utils/axiosInstance";
-
-// const backendURL = import.meta.env.VITE_API_URL;
+import { USER_API } from "../utils/constants";
 
 const TABS = ["All Transaction", "Deposit", "Withdrawal", "Transfer"];
 
 const TransactionHistory = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
-  // const token = localStorage.getItem("userToken");
   const [searchParams] = useSearchParams();
 
   const [statusFilter] = useState("all");
@@ -157,13 +154,13 @@ const TransactionHistory = () => {
   const apiEndpoint = (tab) => {
     switch (tab) {
       case "All Transaction":
-        return "/get_all_wallet_history.php";
+        return `${USER_API.GET_ALL_ORDER_REPORT_HISTORY}`;
       case "Deposit":
-        return "/get_all_deposit_history.php";
+        return `${USER_API.GET_ALL_DEPOSIT_HISTORY}`;
       case "Withdrawal":
-        return "/get_all_withdraw_history.php";
+        return `${USER_API.GET_ALL_WITHDRAW_HISTORY}`;
       case "Transfer":
-        return "/get_all_transfer_history.php";
+        return "transaction_history/get_all_transfer_history.php";
       default:
         return null;
     }

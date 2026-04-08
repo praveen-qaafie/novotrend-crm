@@ -25,8 +25,6 @@ export const DocumentSetting = () => {
   const [frontPreview2, setFrontPreview2] = useState("");
   const [backPreview2, setBackPreview2] = useState("");
 
-  console.log("documentNumber", documentNumber)
-
   const documentTypes = [
     { value: "National ID Card", label: "National ID Card" },
     { value: "Passport", label: "Passport" },

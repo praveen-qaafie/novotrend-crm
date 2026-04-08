@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import api from "../utils/axiosInstance";
 
 const useBankDetails = (url, options = {}, autoFetch = true) => {
@@ -13,7 +12,6 @@ const useBankDetails = (url, options = {}, autoFetch = true) => {
     setLoading(true);
     setError(null);
     try {
-      // const response = await api.get(url, options);
       const response = await api({
         url,
         method: options?.method || "GET",

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangePicker.css";
 import RebateNav from "./RebateNav";
@@ -19,9 +18,6 @@ export default function RebateHistory() {
   // const [clientAccount, setClientAccount] = useState("All accounts");
   // const [activeTooltip, setActiveTooltip] = useState(null);
   const containerRef = useRef(null);
-
-  const backendURL = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("userToken");
 
   const [rebateHistory, setRebateHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -61,7 +57,6 @@ export default function RebateHistory() {
       const response = await api.post(
         `${PARTNER_DASHBOARD.GET_REBATES_HISTORY}`,
         {
-          token: token,
           search: search || "",
           mt5acc: mt5acc || "",
         },

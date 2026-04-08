@@ -1,49 +1,63 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
-import LoginImage from "../../assets/img/AuthUserPage.jpg";
-import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosInstance";
 import { AUTH_API, USER_API } from "../../utils/constants";
+import LoginImage from "../../assets/img/AuthUserPage.jpg";
 
 const OTP_LENGTH = 6;
 
 const EmailVerificationOTP = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { toastOptions, initUserAfterRegister, clearCache } = useUserContext();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
+  // get token
+  const token = location.state?.token;
+
+  const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [otpMessage, setOtpMessage] = useState("");
 
   const inputRefs = useRef([]);
 
-  const navigate = useNavigate();
-  // Redirect verified/logged-in users away from this page
+  // Auto focus first input
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
+
+  // Guard
   useEffect(() => {
     if (localStorage.getItem("UserLogedIn")) {
-      navigate("/dashboard");
-    } else if (!localStorage.getItem("userToken")) {
-      toast.error(
-        "Session expired or invalid access. Please register again.",
-        toastOptions,
-      );
+      navigate("/emailVerify");
+      return;
+    }
+
+    if (!token) {
+      toast.error("Invalid or expired verification access.", toastOptions);
       navigate("/register");
     }
-  }, [navigate, toastOptions]);
+  }, [token, navigate, toastOptions]);
 
+  // OTP change
   const handleOtpChange = (e, index) => {
-    const value = e.target.value.replace(/\D/, ""); // only numbers
+    const value = e.target.value.replace(/\D/g, "");
     if (!value) return;
 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    if (index < inputRefs.length - 1) {
-      inputRefs[index + 1]?.current?.focus();
+    // move next
+    if (index < OTP_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
+  // Backspace handling
   const handleOtpKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       if (otp[index]) {
@@ -51,59 +65,58 @@ const EmailVerificationOTP = () => {
         newOtp[index] = "";
         setOtp(newOtp);
       } else if (index > 0) {
-        inputRefs[index - 1]?.current?.focus();
+        inputRefs.current[index - 1]?.focus();
       }
     }
   };
 
+  // Paste support
   const handlePaste = (e) => {
     const paste = e.clipboardData
       .getData("text")
       .replace(/\D/g, "")
       .slice(0, OTP_LENGTH);
 
-    if (paste.length) {
-      const newOtp = [...otp];
-      paste.split("").forEach((char, i) => {
-        newOtp[i] = char;
-      });
+    if (paste) {
+      const newOtp = paste.split("");
+      while (newOtp.length < OTP_LENGTH) newOtp.push("");
       setOtp(newOtp);
 
-      // Move focus to last filled input
-      const lastIndex = paste.length - 1;
-      if (inputRefs.current[lastIndex]) {
-        inputRefs.current[lastIndex].focus();
-      }
-
+      inputRefs.current[paste.length - 1]?.focus();
       e.preventDefault();
     }
   };
 
+  // Check OTP complete
+  const isOtpComplete = otp.every((digit) => digit !== "");
+
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    const otpValue = otp.join("");
-    if (otpValue.length < 6) {
-      toast.error("Please enter a valid 6-digit OTP", toastOptions);
-      setIsLoading(false);
+
+    if (!isOtpComplete) {
+      toast.error("Please enter complete OTP", toastOptions);
       return;
     }
+
+    setIsLoading(true);
+
     try {
-      const token = localStorage.getItem("userToken");
-      if (!token) {
-        toast.error("Session expired. Please register again.", toastOptions);
-        setIsLoading(false);
-        return;
-      }
       clearCache();
 
       const response = await api.post(`${USER_API.REGISTER_OTP_VERIFY}`, {
-        otp: otpValue,
+        otp: otp.join(""),
+        token,
       });
+
       const responseData = response?.data?.data;
+
       if (responseData?.status === 200) {
         await initUserAfterRegister();
+
         toast.success(responseData.result || "OTP Verified!", toastOptions);
+
+        // Save AFTER success
         localStorage.setItem("UserLogedIn", true);
         localStorage.setItem(
           "UserInfo",
@@ -113,43 +126,35 @@ const EmailVerificationOTP = () => {
           "userToken",
           responseData?.response?.token || token,
         );
-        setOtp(["", "", "", "", "", ""]);
+
         navigate("/dashboard");
       } else {
-        toast.error(
-          responseData?.result || "Invalid OTP. Please try again.",
-          toastOptions,
-        );
+        toast.error(responseData?.result || "Invalid OTP", toastOptions);
       }
-    } catch (error) {
-      toast.error("Invalid OTP. Please try again.", toastOptions);
+    } catch (err) {
+      toast.error("Something went wrong", toastOptions);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Resend OTP
   const handleResend = async () => {
     setResendLoading(true);
-    const token = localStorage.getItem("userToken");
+
     try {
       const response = await api.post(`${AUTH_API.SEND_OTP_REG}`, {
-        token: token,
+        token,
       });
-      if (response?.data?.data.status === 200) {
-        toast.success("OTP resent to your email.", toastOptions);
+
+      if (response?.data?.data?.status === 200) {
+        toast.success("OTP resent", toastOptions);
         setOtpMessage(response?.data?.data?.result);
       } else {
-        toast.error(
-          response?.data?.message || "Failed to resend OTP.",
-          toastOptions,
-        );
+        toast.error("Failed to resend OTP", toastOptions);
       }
-    } catch (error) {
-      console.error("Resend OTP Error:", error);
-      toast.error(
-        error.response?.data?.message || "Something went wrong, try again.",
-        toastOptions,
-      );
+    } catch (err) {
+      toast.error("Error resending OTP", toastOptions);
     } finally {
       setResendLoading(false);
     }
@@ -157,80 +162,55 @@ const EmailVerificationOTP = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Side - Image */}
-      <div className="md:w-1/2 w-full h-64 md:h-auto hidden lg:block bg-blue-600 relative">
-        <div className="h-full w-full">
-          <img
-            src={LoginImage}
-            alt="Auth Visual"
-            className="w-full h-full object-center object-cover"
-          />
-        </div>
+      {/* Left */}
+      <div className="hidden lg:block w-1/2">
+        <img src={LoginImage} className="w-full h-full object-cover" />
       </div>
 
-      {/* Right Section */}
-      <div className="lg:w-1/2 w-full flex items-center justify-center bg-white p-8">
-        <div className="w-full max-w-md">
-          <div className="mb-6 text-center">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              Email Verification
-            </h2>
-            <p className="text-center text-gray-500 mb-8">
-              A verification code has been sent to your email
-            </p>
-          </div>
+      {/* Right */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+        <div className="max-w-md w-full">
+          <h2 className="text-2xl font-semibold text-center mb-6">
+            Email Verification
+          </h2>
+
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="text-sm font-medium text-[#414651] mb-2 block">
-                Verification code
-              </label>
-              <div className="flex justify-between gap-2" onPaste={handlePaste}>
-                {otp.map((digit, idx) => (
-                  <input
-                    key={idx}
-                    ref={(el) => (inputRefs.current[idx] = el)}
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(e, idx)}
-                    onKeyDown={(e) => handleOtpKeyDown(e, idx)}
-                    className="w-10 h-10 text-center text-2xl border border-gray-300 rounded focus:border-blue-500 focus:outline-none transition"
-                  />
-                ))}
-              </div>
+            <div className="flex gap-2 justify-between" onPaste={handlePaste}>
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  type="text"
+                  maxLength={1}
+                  value={digit}
+                  inputMode="numeric"
+                  onChange={(e) => handleOtpChange(e, index)}
+                  onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                  className="w-12 h-12 text-center border rounded text-xl"
+                />
+              ))}
             </div>
+
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 transition text-lg mt-2"
-              disabled={isLoading}
+              disabled={!isOtpComplete || isLoading}
+              className="w-full mt-6 bg-blue-600 text-white py-3 rounded disabled:opacity-50"
             >
               {isLoading ? "Verifying..." : "Submit"}
             </button>
           </form>
-          <div className="text-center mt-4">
-            <button
-              onClick={handleResend}
-              className="text-blue-600 text-sm hover:underline disabled:opacity-50"
-              disabled={resendLoading}
-            >
-              {resendLoading ? "Resending..." : "Resend OTP"}
-            </button>
-            {otpMessage && (
-              <span
-                style={{ color: "green", display: "block", marginTop: "8px" }}
-              >
-                {otpMessage}
-              </span>
-            )}
-          </div>
-          <div className="text-center mt-4">
-            <p>
-              If you never requested verification, you can safely ignore this
-              email.
-            </p>
-          </div>
+
+          <button
+            onClick={handleResend}
+            disabled={resendLoading}
+            className="mt-4 text-blue-600 underline"
+          >
+            {resendLoading ? "Resending..." : "Resend OTP"}
+          </button>
+
+          {otpMessage && (
+            <p className="text-green-600 mt-2 text-center">{otpMessage}</p>
+          )}
         </div>
       </div>
     </div>

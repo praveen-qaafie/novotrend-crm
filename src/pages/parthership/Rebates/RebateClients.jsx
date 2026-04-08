@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import RebateNav from "./RebateNav";
-import axios from "axios";
 import { FiLoader, FiSearch } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import * as XLSX from "xlsx";
@@ -12,9 +11,6 @@ import api from "../../../utils/axiosInstance";
 export default function RebateClients() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
-
-  const backendURL = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("userToken");
 
   const [rebatesData, setRebatesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +50,6 @@ export default function RebateClients() {
         const response = await api.post(
           `${PARTNER_DASHBOARD.GET_REBATES_CLIENT}`,
           {
-            token: token,
             search: search || "",
             mt5acc: mt5acc || "",
           },
@@ -66,7 +61,7 @@ export default function RebateClients() {
         setLoading(false);
       }
     },
-    [backendURL, token],
+    [],
   ); // include dependencies
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/userContext";
 import { useSidebar } from "../context/SidebarContext";
@@ -16,8 +15,6 @@ import {
 import { FiLoader } from "react-icons/fi";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
-
-const backendURL = import.meta.env.VITE_API_URL;
 
 // static values for account types
 const accountTypeDefaults = {
@@ -45,7 +42,6 @@ export const SelectAccountType = () => {
   const { toggle, isMobile, setToggle } = useSidebar();
   const { toastOptions } = useUserContext();
   const navigate = useNavigate();
-  const token = localStorage.getItem("userToken");
 
   const [list_group, setList_group] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState("");
@@ -67,7 +63,7 @@ export const SelectAccountType = () => {
           );
         }
       } catch (err) {
-        // console.error("Error fetching groups:", err);
+        console.error("Error fetching groups:", err);
         toast.error("Network error while fetching groups", toastOptions);
       } finally {
         setLoading(false);

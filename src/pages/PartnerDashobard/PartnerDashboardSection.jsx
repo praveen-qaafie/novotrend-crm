@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import { IoTimeSharp } from "react-icons/io5";
 import { FaRegCopy, FaUserCheck, FaChartLine } from "react-icons/fa";
 import { AiOutlineRocket, AiOutlineStar } from "react-icons/ai";
@@ -53,8 +52,6 @@ const PartnerDashboardSection = ({ userData }) => {
 
   const partnerCode = userData?.user_code || "";
   const partnerLink = `https://member.novotrend.co/register/${partnerCode}`;
-  const token = localStorage.getItem("userToken");
-  const backendURL = import.meta.env.VITE_API_URL;
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isPartnerLevelsOpen, setIsPartnerLevelsOpen] = useState(false);
 
@@ -78,7 +75,7 @@ const PartnerDashboardSection = ({ userData }) => {
           toast.error(apiResp?.result, toastOptions);
         }
       });
-  }, [backendURL, token, toastOptions]);
+  }, [toastOptions]);
 
   useEffect(() => {
     getIbDashboaerd();

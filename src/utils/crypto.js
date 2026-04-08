@@ -2,7 +2,7 @@ import CryptoJS from "crypto-js";
 
 export function encryptPayload(text) {
   const stringifiedData = JSON.stringify(text);
-  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPT_KEY);
+  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPTION_KEY);
   const iv = CryptoJS.lib.WordArray.random(16);
 
   const encrypted = CryptoJS.AES.encrypt(stringifiedData, key, {
@@ -18,7 +18,7 @@ export function encryptPayload(text) {
 }
 
 export function decryptResponse(encryptedText) {
-  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPT_KEY);
+  const key = CryptoJS.enc.Base64.parse(import.meta.env.VITE_ENCRYPTION_KEY);
 
   const decoded = atob(encryptedText);
   const [cipherText, iv] = decoded.split("::");

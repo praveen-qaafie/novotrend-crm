@@ -26,6 +26,7 @@ export const validateUserFields = (fields, userImage) => {
   }
 
   // Email
+  
   if (!fields.email.trim()) {
     errors.email = "Email is required";
   } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(fields.email)) {

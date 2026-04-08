@@ -120,12 +120,11 @@ const UserContextProvider = ({ children }) => {
 
   const initUserAfterRegister = async () => {
     try {
-      // await Promise.all([
-      //   fetchDashboardData(),
-      //   fetchBalanceData(),
-      //   fetchUserData(),
-      // ]);
-      console.log("");
+      await Promise.all([
+        fetchDashboardData(),
+        fetchBalanceData(),
+        fetchUserData(),
+      ]);
     } catch (err) {
       console.error("Init user after register failed:", err);
     }
@@ -134,13 +133,12 @@ const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const initializeData = async () => {
       try {
-        // await Promise.all([
-        //   fetchDashboardData(),
-        //   fetchBalanceData(),
-        //   fetchUserData(),
-        //   getMt5Acc(),
-        // ]);
-        console.log("");
+        await Promise.all([
+          fetchDashboardData(),
+          fetchBalanceData(),
+          fetchUserData(),
+          getMt5Acc(),
+        ]);
       } catch (error) {
         console.error("Error initializing data:", error);
       }
@@ -159,45 +157,53 @@ const UserContextProvider = ({ children }) => {
     setMt5_acc_list([]);
   };
 
-  // userLogin
   const userLogin = async ({ email, password }) => {
     try {
-      const { data } = await api.post(`${AUTH_API.LOGIN}`, {
+      const response = await api.post(`${AUTH_API.LOGIN}`, {
         email,
         password,
       });
 
-      console.log("Full response data:", data); // ← poora response
-      console.log("data.data:", data?.data); // ← nested data
-      console.log("data.data.status:", data?.data?.status);
+      // handle both structures
+      const apiData = response?.data?.data || response?.data;
 
-      if (data?.status === 200) {
-        const { response } = data.data;
+      if (apiData?.status === 200) {
+        const token = apiData?.response;
 
-        setUserInfo(response);
-        localStorage.setItem("UserInfo", JSON.stringify(response));
-        localStorage.setItem("userToken", response.token);
+        // store user + token
+        setUserInfo(apiData);
+        localStorage.setItem("UserInfo", JSON.stringify(apiData));
+        localStorage.setItem("userToken", token);
 
         clearCache();
 
-        // await Promise.all([
-        //   fetchDashboardData(),
-        //   fetchBalanceData(),
-        //   fetchUserData(),
-        //   getMt5Acc(),
-        // ]);
+        // preload user data
+        await Promise.all([
+          fetchDashboardData(),
+          fetchBalanceData(),
+          fetchUserData(),
+          getMt5Acc(),
+        ]);
       } else {
         localStorage.clear();
         clearCache();
       }
-      return data.data;
+
+      //  ALWAYS return clean structure
+      return apiData;
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login failed! Please try again.", toastOptions);
+
+      // return safe fallback so UI crash na ho
+      return {
+        status: 500,
+        result: "Something went wrong",
+      };
     }
   };
 
-  // forgotPassword
+  // forgotPassword function
   const ForgotPass = async ({ email }) => {
     try {
       const { data } = await api.post(`${AUTH_API.FORGOT_PASSWORD}`, {
@@ -221,7 +227,6 @@ const UserContextProvider = ({ children }) => {
   const becomePartner = async (accept) => {
     setIsLoading(true);
     const payload = {
-      // token,
       term_accept: accept ? 1 : 0,
     };
     try {

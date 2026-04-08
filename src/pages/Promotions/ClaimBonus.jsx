@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUserContext } from "../../context/userContext";
-import axios from "axios";
+// import axios from "axios";
 import { FiLoader } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { USER_API } from "../../utils/constants";
 
 const ClaimBonus = () => {
   const navigate = useNavigate();
-  const backendURL = import.meta.env.VITE_API_URL;
+  // const backendURL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("userToken");
   const { toastOptions } = useUserContext();
 

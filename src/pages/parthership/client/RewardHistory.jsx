@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import { FiLoader, FiSearch } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import * as XLSX from "xlsx";
@@ -9,8 +8,6 @@ import api from "../../../utils/axiosInstance";
 import { PARTNER_DASHBOARD } from "../../../utils/constants";
 
 export default function ClientRewardHistory() {
-  const backendURL = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("userToken");
 
   const [rewardHistory, setRewardHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,27 +39,23 @@ export default function ClientRewardHistory() {
 
   // ---------------- FETCH DATA ----------------
 
-  const fetchRewardHistoryData = useCallback(
-    async (search, mt5acc) => {
-      setLoading(true);
-      try {
-        const response = await api.post(
-          `${PARTNER_DASHBOARD.GET_REPORT_REWARD_HISTORY}`,
-          {
-            token,
-            search: search || "",
-            mt5acc: mt5acc || "",
-          },
-        );
-        setRewardHistory(response.data.data.response);
-      } catch (err) {
-        console.error("err -------->", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [backendURL, token],
-  );
+  const fetchRewardHistoryData = useCallback(async (search, mt5acc) => {
+    setLoading(true);
+    try {
+      const response = await api.post(
+        `${PARTNER_DASHBOARD.GET_REPORT_REWARD_HISTORY}`,
+        {
+          search: search || "",
+          mt5acc: mt5acc || "",
+        },
+      );
+      setRewardHistory(response.data.data.response);
+    } catch (err) {
+      console.error("err -------->", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchRewardHistoryData(debouncedSearch, debouncedMt5);

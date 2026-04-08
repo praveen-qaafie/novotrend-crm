@@ -12,24 +12,6 @@ const useLogoutHandler = () => {
 
   const { clearCache } = useUserContext();
 
-  // Logout function
-  // const handleLogOut = useCallback(async () => {
-  //   try {
-  //     const token = localStorage.getItem("userToken");
-
-  //     if (token) {
-  //       await api.post(`${AUTH_API.LOG_OUT}`);
-  //     }
-  //   } catch (err) {
-  //     console.error("Logout failed", err);
-  //   } finally {
-  //     clearCache();
-  //     localStorage.clear();
-  //     localStorage.setItem("logout-event", Date.now().toString());
-  //     navigate("/login");
-  //   }
-  // }, [navigate, clearCache]);
-
   const handleLogOut = useCallback(async () => {
     try {
       await api.post(AUTH_API.LOG_OUT);
