@@ -23,8 +23,8 @@ export const USER_API = {
   DEPOSIT_FUNDS_ADD_WALLET_BAL_CASH:
     "deposit/deposit_funds_add_wallet_bal_cash.php",
   CHANGE_LOGINPASSWORD: "users/change_loginpassword.php",
-  EKYC: "ekyc.php",
-  GET_KYC: "get_ekyc.php",
+  EKYC: "users/ekyc.php",
+  GET_KYC: "users/get_ekyc.php",
   CHECK_MT5_ACC_BALANCE: "check_mt5_acc_balance.php",
   MT5_TO_WALLET: "mt5towallet/mt5_to_wallet_api.php",
   GET_PARTNER_DASHBOARD: "get_partner_dashboard.php",
@@ -32,9 +32,10 @@ export const USER_API = {
   UNLINK_AUTH_VERIFY: "unlink_auth_verify.php",
   LIST_GROUP: "accounts/list_group.php",
   SEND_OTP_EMAIL: "send_otp_email.php",
-  GET_SUPPORT_TICKET: "get_support_ticket.php",
-  CREATE_SUPPORT_TICKET: "create_support_ticket.php",
-  OPEN_SUPPORT_TICKETS: "open_support_ticket_list.php",
+  GET_SUPPORT_TICKET: "support_ticket/get_support_ticket.php",
+  // CREATE_SUPPORT_TICKET: "/create_support_ticket.php",
+  CREATE_SUPPORT_TICKET: "support_ticket/add_remark_create_support_ticket.php", 
+  OPEN_SUPPORT_TICKETS: "support_ticket/open_support_ticket_list.php",
   OPEN_SUPPORT_TICKET_DETAILS: "details_open_support_ticket_list.php",
   ADD_REMARK_CREATE_SUPPORT_TICKET: "add_remark_create_support_ticket.php",
   GET_ALL_ORDER_REPORT_HISTORY:
@@ -65,7 +66,7 @@ export const USER_API = {
   OPEN_LIVE_ACCOUNT_ADD: "accounts/open_live_account_add.php",
   UPDATE_USER: "users/update_user.php",
   UPDATE_ONLY_EMAIL: "update_only_email.php",
-  UPDATE_ONLY_MOBILE_NO: "update_only_mobileno.php",
+  UPDATE_ONLY_MOBILE_NO: "update_only_mobileno.php", // pending 
   GET_REPORT_CLIENT_TRANSACTION: "get_report_client_transaction.php",
   GET_CLIENT_ACCOUNTS: "get_client_accounts.php",
   GET_ALL_WALLET_HISTORY: "transaction_history/get_all_wallet_history.php",

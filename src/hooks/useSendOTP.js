@@ -20,8 +20,8 @@ export const useSendOTP = (
         const optResponse = await api.post(`${AUTH_API.SEND_OTP}`, {
           amount: amount,
           otp_type,
-          mt5_id,
-          mt5_receiverid,
+          mt5_id:"",
+          mt5_receiverid: "",
         });
         const responseData = optResponse?.data?.data;
 
@@ -46,14 +46,7 @@ export const useSendOTP = (
         toast.error("Something went wrong. Please try again.", toastOptions);
       }
     },
-    [
-      toastOptions,
-      setToastMessage,
-      otp_type,
-      amount,
-      mt5_id,
-      mt5_receiverid,
-    ],
+    [toastOptions, setToastMessage, otp_type, amount, mt5_id, mt5_receiverid],
   );
 
   return { sendOtp, isOtPSend };

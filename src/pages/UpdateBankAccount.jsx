@@ -246,7 +246,7 @@ export const UpdateBankAccount = () => {
     formData.append("ifsc", inputFields.ifsc);
     formData.append("iban_number", inputFields.iban_number);
     formData.append("bankaddress", inputFields.bankaddress);
-    formData.append("kyc_bank_country", "1");
+    // formData.append("kyc_bank_country", "1"); // not using 
 
     if (kycBankImageFile) {
       formData.append("kyc_bank_image", kycBankImageFile);
@@ -255,7 +255,9 @@ export const UpdateBankAccount = () => {
     try {
       setIsSubmitting(true);
       const response = await api.post(`${USER_API.ADD_USER_BANK}`, formData);
+      console.log("formData", formData);
       if (response.data.data.status === 200) {
+        console.log("something went wrong ?")
         await getBankDetail();
         toast.success(response.data.data.result, toastOptions);
         setTimeout(() => {

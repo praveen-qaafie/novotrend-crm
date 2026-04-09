@@ -5,21 +5,70 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Request Interceptor
 api.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("userToken");
 
+    // token attach 
     if (token) {
-      config.data = {
-        ...config.data,
-        token,
-      };
+      if (config.method === "get") {
+        config.params = {
+          ...config.params,
+          token,
+        };
+      } else if (config.data instanceof FormData) {
+        config.data.append("token", token);
+      } else if (config.data && typeof config.data === "object") {
+        config.data = {
+          ...config.data,
+          token,
+        };
+      } else {
+        config.data = { token };
+      }
     }
 
-    if (config.data) {
-      const encrypted = await encryptPayload(config.data);
-      config.data = { data: encrypted };
+    // ===== ENCRYPTION PART =====
+    if (config.method !== "get") {
+      let rawPayload;
+
+      //  UPDATED: FormData handling
+      if (config.data instanceof FormData) {
+        const originalFormData = config.data;
+        const newFormData = new FormData();
+        rawPayload = {};
+
+        originalFormData.forEach((value, key) => {
+          //  FILE or IMAGE (single + multiple both handle)
+          if (value instanceof File || value instanceof Blob) {
+            newFormData.append(key, value); // direct send
+          } else {
+            rawPayload[key] = value; // encryptable data
+          }
+        });
+
+        // console raw payload 
+        // console.log("RAW PAYLOAD (NO FILE):", rawPayload);
+
+        const encrypted = await encryptPayload(rawPayload);
+
+        console.log("ENCRYPTED PAYLOAD:", encrypted);
+
+        // encrypted data add
+        newFormData.append("data", encrypted);
+
+        config.data = newFormData;
+      }
+
+      // JSON case
+      else {
+        rawPayload = config.data || {};
+
+        console.log("RAW PAYLOAD:", rawPayload);
+        const encrypted = await encryptPayload(rawPayload);
+        // console.log("ENCRYPTED PAYLOAD:", encrypted);
+        config.data = { data: encrypted };
+      }
     }
 
     return config;
@@ -27,12 +76,14 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+// Response Interceptor
 api.interceptors.response.use(
   async (response) => {
+    // console.log("response-api", response);
     try {
       const decrypted = decryptResponse(response?.data);
       const parsedData = JSON.parse(decrypted);
-      // console.log("parsedData", parsedData)
+      console.log("parsedData", parsedData);
       response.data = parsedData;
 
       return response;
