@@ -241,8 +241,6 @@ const AuthPage = ({ isLogin = true }) => {
       const registerResp = await api.post(`${AUTH_API.REGISTER}`, body);
       const responseData = registerResp?.data?.data;
 
-      // console.log("responseData==>", responseData);
-
       if (responseData?.status === 200) {
 
         setIsLoading(false);

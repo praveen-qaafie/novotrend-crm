@@ -24,10 +24,18 @@ import { MdDashboard } from "react-icons/md";
 import { useState } from "react";
 import { maskEmail } from "../../utils/makingEmail";
 import useLogoutHandler from "../../hooks/useLogout";
-
+// import { decryptResponse } from "../../utils/crypto";
 
 export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
-  const UserData = JSON.parse(localStorage.getItem("UserInfo"));
+  const UserInfo = JSON.parse(localStorage.getItem("UserInfo"));
+  // console.log("dd", localStorage.getItem("UserInfo"));
+  // console.log("UserData", UserInfo);
+
+  // const stored = JSON.parse(localStorage.getItem("UserInfo"));
+  // console.log("stored", stored.response)
+  // const decrypted = decryptResponse(stored.response);
+  // console.log("decrypted", decrypted);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expanded, setExpanded] = useState({});
   // const { toastOptions } = useContext(ActiveUserContext);
@@ -39,13 +47,15 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
 
   const { notifications, unreadCount, markAsRead } = useNotifications(
     15000,
-    partnerURL
+    partnerURL,
   );
 
-  const abbreviatedName = UserData?.name
-    .split(" ")
-    .map((value) => value.charAt(0).toUpperCase())
-    .join("");
+  // const abbreviatedName = UserData?.name
+  //   .split(" ")
+  //   .map((value) => value.charAt(0).toUpperCase())
+  //   .join("");
+
+  // console.log("abbreviatedName", abbreviatedName);
 
   const [profileOptionsToggle, setProfileOptionsToggle] = useState(false);
 
@@ -119,18 +129,18 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
             >
               <div className="">
                 <span className="w-10 h-10 bg-blue-500 text-white font-bold flex items-center justify-center rounded-lg">
-                  {abbreviatedName || (
+                  {/* {abbreviatedName || (
                     <img
                       src={userImg}
                       alt="Avatar"
                       className="w-12 h-12 rounded-lg"
                     />
-                  )}
+                  )} */}
                 </span>
               </div>
               <div className="text-start text-md">
                 <div className="text-start text-md">
-                  <p>{UserData?.name || "JD"}</p>
+                  <p>{UserInfo?.name || "JD"}</p>
                 </div>
               </div>
               <div>
@@ -387,8 +397,8 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
                       <CgProfile className="w-6 h-6" />
                     </div>
                     <div className="text-start text-sm">
-                      <p>{UserData?.name || ""}</p>
-                      <span>{maskEmail(UserData?.email)}</span>
+                      <p>{UserInfo?.name || ""}</p>
+                      <span>{maskEmail(UserInfo?.email)}</span>
                     </div>
                   </div>
                   <hr className="bg-black my-2" />

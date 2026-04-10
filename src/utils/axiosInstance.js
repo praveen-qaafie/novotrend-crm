@@ -48,7 +48,7 @@ api.interceptors.request.use(
         });
 
         // console raw payload 
-        // console.log("RAW PAYLOAD (NO FILE):", rawPayload);
+        console.log("RAW PAYLOAD (NO FILE):", rawPayload);
 
         const encrypted = await encryptPayload(rawPayload);
 

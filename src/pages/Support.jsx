@@ -105,7 +105,7 @@ export const Support = () => {
 
     try {
       const response = await api.post(
-        `${USER_API.CREATE_SUPPORT_TICKET}`,
+        `${USER_API.CREATE_SUPPORT_TICKET}`, // this ? 
         formData,
       );
 
@@ -138,11 +138,10 @@ export const Support = () => {
 
     try {
       const response = await api.post(
-        `${USER_API.OPEN_SUPPORT_TICKETS}`,
+        `${USER_API.OPEN_SUPPORT_TICKET_LIST}`,
         payload,
       );
       const data = response.data?.data;
-
       if (data?.status === 200 && Array.isArray(data?.response)) {
         setSupportTickets(data.response);
       } else {

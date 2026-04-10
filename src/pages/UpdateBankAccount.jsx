@@ -257,7 +257,6 @@ export const UpdateBankAccount = () => {
       const response = await api.post(`${USER_API.ADD_USER_BANK}`, formData);
       console.log("formData", formData);
       if (response.data.data.status === 200) {
-        console.log("something went wrong ?")
         await getBankDetail();
         toast.success(response.data.data.result, toastOptions);
         setTimeout(() => {

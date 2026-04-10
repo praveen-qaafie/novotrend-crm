@@ -34,6 +34,7 @@ export const Settings = () => {
     },
   });
 
+
   const [initialFields, setInitialFields] = useState(null);
   const [errors, setErrors] = useState({});
   const [isUserLoading, setIsUserLoading] = useState(true);
@@ -229,7 +230,6 @@ export const Settings = () => {
     e.preventDefault();
     // Validate before submitting
     const validationErrors = validateUserFields(inputFields, userImage);
-    // console.log("validationErrors", validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -308,7 +308,7 @@ export const Settings = () => {
 
     try {
       const body = {
-        country: inputFields.mobile.country_id,
+        country: inputFields.mobile.country_id, // 
         mobileno: inputFields.mobile.number,
       };
       const response = await api.post(
@@ -317,7 +317,7 @@ export const Settings = () => {
       );
       if (response.data.data.status === 200) {
         toast.success(response.data.data.result, toastOptions);
-        getUser();
+        getUser(); // 
         await fetchUserData(true);
         setErrors({});
       } else {

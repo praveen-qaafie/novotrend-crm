@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import api from "../utils/axiosInstance";
 import { USER_NOTIFICATION } from "../utils/constants";
 
-const useNotifications = (intervalTime = 15000, url) => {
+const useNotifications = (intervalTime = 1500000000, url) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const intervalRef = useRef(null);

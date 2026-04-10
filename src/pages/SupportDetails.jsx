@@ -99,7 +99,7 @@ const SupportDetails = () => {
 
     try {
       const response = await api.post(
-        `${USER_API.ADD_REMARK_CREATE_SUPPORT_TICKET}`,
+        `${USER_API.ADD_REMARK_CREATE_SUPPORT_TICKET}`, // this ? 
         formData,
       );
 
