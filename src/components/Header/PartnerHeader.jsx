@@ -24,17 +24,11 @@ import { MdDashboard } from "react-icons/md";
 import { useState } from "react";
 import { maskEmail } from "../../utils/makingEmail";
 import useLogoutHandler from "../../hooks/useLogout";
-// import { decryptResponse } from "../../utils/crypto";
+import { PARTNER_DASHBOARD } from "../../utils/constants";
+import { useUserContext } from "../../context/userContext";
 
 export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
-  const UserInfo = JSON.parse(localStorage.getItem("UserInfo"));
-  // console.log("dd", localStorage.getItem("UserInfo"));
-  // console.log("UserData", UserInfo);
-
-  // const stored = JSON.parse(localStorage.getItem("UserInfo"));
-  // console.log("stored", stored.response)
-  // const decrypted = decryptResponse(stored.response);
-  // console.log("decrypted", decrypted);
+  const { userInfo } = useUserContext();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expanded, setExpanded] = useState({});
@@ -43,19 +37,17 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const userImg = "https://ui-avatars.com/api/?name=User";
-  const partnerURL = "/get_user_partner_notification.php";
+  const partnerURL = `${PARTNER_DASHBOARD.GET_USER_PARTNER_NOTIFICATION}`;
 
   const { notifications, unreadCount, markAsRead } = useNotifications(
     15000,
     partnerURL,
   );
 
-  // const abbreviatedName = UserData?.name
-  //   .split(" ")
-  //   .map((value) => value.charAt(0).toUpperCase())
-  //   .join("");
-
-  // console.log("abbreviatedName", abbreviatedName);
+  const abbreviatedName = userInfo?.user_name
+    .split(" ")
+    .map((value) => value.charAt(0).toUpperCase())
+    .join("");
 
   const [profileOptionsToggle, setProfileOptionsToggle] = useState(false);
 
@@ -129,18 +121,18 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
             >
               <div className="">
                 <span className="w-10 h-10 bg-blue-500 text-white font-bold flex items-center justify-center rounded-lg">
-                  {/* {abbreviatedName || (
+                  {abbreviatedName || (
                     <img
                       src={userImg}
                       alt="Avatar"
                       className="w-12 h-12 rounded-lg"
                     />
-                  )} */}
+                  )}
                 </span>
               </div>
               <div className="text-start text-md">
                 <div className="text-start text-md">
-                  <p>{UserInfo?.name || "JD"}</p>
+                  <p>{userInfo?.user_name || "JD"}</p>
                 </div>
               </div>
               <div>
@@ -397,8 +389,8 @@ export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
                       <CgProfile className="w-6 h-6" />
                     </div>
                     <div className="text-start text-sm">
-                      <p>{UserInfo?.name || ""}</p>
-                      <span>{maskEmail(UserInfo?.email)}</span>
+                      <p>{userInfo?.user_name || ""}</p>
+                      <span>{maskEmail(userInfo?.user_reg_code)}</span>
                     </div>
                   </div>
                   <hr className="bg-black my-2" />

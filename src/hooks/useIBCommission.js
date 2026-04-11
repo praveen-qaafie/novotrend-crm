@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { apiRequest } from "../utils/api";
-import { USER_API } from "../utils/constants";
+import { PARTNER_DASHBOARD } from "../utils/constants";
 
 export default function useIBCommission(backendURL, token) {
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,7 @@ export default function useIBCommission(backendURL, token) {
   const fetchHistory = async () => {
     setLoading(true);
     const { data, error } = await apiRequest(
-      `${USER_API.GET_IB_ALL_COMMISSION}`,
+      `${PARTNER_DASHBOARD.GET_IB_ALL_COMMISSION}`,
     );
     if (data) {
       setTableData(data?.data?.response);
@@ -26,7 +26,7 @@ export default function useIBCommission(backendURL, token) {
 
   // Fetch total commission
   const fetchTotalCommission = async () => {
-    const { data, error } = await apiRequest(`${USER_API.GET_IB_COMMISSION}`);
+    const { data, error } = await apiRequest(`${PARTNER_DASHBOARD.GET_IB_COMMISSION}`);
     if (data) {
       setTotalCommission(parseFloat(data?.data?.response?.total_ib_commission));
     }

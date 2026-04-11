@@ -195,7 +195,7 @@ const UserContextProvider = ({ children }) => {
       console.error("Login error:", error);
       toast.error("Login failed! Please try again.", toastOptions);
 
-      // return safe fallback so UI crash na ho
+      // return safe fallback
       return {
         status: 500,
         result: "Something went wrong",

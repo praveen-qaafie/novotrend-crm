@@ -16,7 +16,7 @@ const EmailVerificationOTP = () => {
 
   // get token
   const token = location.state?.token;
-  // console.log("token", token);
+  console.log("token-1", token);
 
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
@@ -111,13 +111,11 @@ const EmailVerificationOTP = () => {
       });
 
       const responseData = response?.data?.data;
-
-      // console.log("response", responseData);
+      console.log("responseData", responseData);
+      console.log("token-2", responseData?.token?.usertoken); // token
 
       if (responseData?.status === 200) {
-        // console.log("responseData?.status === 200", responseData?.status === 200)
-        await initUserAfterRegister(); // load API 
-
+        // await initUserAfterRegister();
         toast.success(responseData.result || "OTP Verified!", toastOptions);
 
         // Save AFTER success
@@ -126,12 +124,9 @@ const EmailVerificationOTP = () => {
           "UserInfo",
           JSON.stringify(responseData?.response),
         );
-        localStorage.setItem(
-          "userToken",
-          responseData?.response?.token || token,
-        );
+        localStorage.setItem("userToken", token);
 
-        navigate("/dashboard"); //
+        navigate("/login");
       } else {
         toast.error(responseData?.result || "Invalid OTP", toastOptions);
       }

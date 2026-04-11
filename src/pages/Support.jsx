@@ -89,6 +89,8 @@ export const Support = () => {
   );
   const selectedMastId = selectedCategory ? selectedCategory.s_mast_id : "";
 
+  console.log("selectedMastId", selectedMastId)
+
   const AddSupportTicketData = async (e) => {
     e.preventDefault();
 
@@ -105,7 +107,7 @@ export const Support = () => {
 
     try {
       const response = await api.post(
-        `${USER_API.CREATE_SUPPORT_TICKET}`, // this ? 
+        `${USER_API.CREATE_SUPPORT_TICKET}`,
         formData,
       );
 

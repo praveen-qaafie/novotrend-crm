@@ -16,6 +16,8 @@ const Layout = ({ children }) => {
   const [showPromo, setShowPromo] = useState(false);
   const location = useLocation();
 
+  console.log("userInfo", userInfo);
+
   const withoutPromotionCard = [
     "/transaction-history",
     "/Trading-History/",

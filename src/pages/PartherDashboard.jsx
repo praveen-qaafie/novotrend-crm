@@ -7,7 +7,7 @@ import {
 } from "./PartnerDashobard";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/userContext";
-import { USER_API } from "../utils/constants";
+import { PARTNER_DASHBOARD } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
 function PartherDashboard() {
@@ -19,7 +19,7 @@ function PartherDashboard() {
     setLoading(true);
 
     try {
-      const resp = await api.post(`${USER_API.GET_PARTNER_DASHBOARD}`);
+      const resp = await api.post(`${PARTNER_DASHBOARD.GET_PARTNER_DASHBOARD}`);
 
       const apiResp = resp.data.data;
 

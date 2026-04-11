@@ -397,11 +397,11 @@ const routes = createBrowserRouter([
   },
   {
     path: "/register/:partnerCode?",
-    element: <AuthPage isLogin={false} />,
+    element: <AuthPage isLogin={false} />
   },
   {
     path: "/login",
-    element: <AuthPage isLogin={true} />,
+    element: <AuthPage isLogin={true} />
   },
   {
     path: "/emailVerify",

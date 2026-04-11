@@ -108,6 +108,7 @@ const AuthPage = ({ isLogin = true }) => {
 
       // handle both cases
       const apiData = user?.data || user;
+      console.log("login-apiData", apiData)
       setResponseError(apiData);
       if (apiData?.status === 200) {
         const authType = Number(apiData?.authType ?? 0);

@@ -49,6 +49,10 @@ export const Settings = () => {
   const inputRef = useRef(null);
   const containerRef = useRef(null);
 
+
+  console.log("dd-3", inputFields.mobile.country_id);
+  console.log("dd-4", inputFields.countryCode)
+
   // Close date picker on outside click
   useEffect(() => {
     if (!isOpen) return;

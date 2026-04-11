@@ -2,14 +2,13 @@ import { useState, useRef, useEffect, useCallback } from "react";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateRangePicker.css";
-// import axios from "axios";
 import { FiLoader, FiSearch } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import api from "../../../utils/axiosInstance";
-import { USER_API } from "../../../utils/constants";
+import { PARTNER_DASHBOARD } from "../../../utils/constants";
 
 export default function ClientTransaction() {
   // const [startDate, setStartDate] = useState(new Date(2025, 5, 13));
@@ -17,9 +16,6 @@ export default function ClientTransaction() {
   const [isOpen, setIsOpen] = useState(false);
   // const inputRef = useRef(null);
   const containerRef = useRef(null);
-
-  // const backendURL = import.meta.env.VITE_API_URL;
-  // const token = localStorage.getItem("userToken");
 
   const [clientTransactionData, setClientTransactionData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -57,9 +53,8 @@ export default function ClientTransaction() {
     setLoading(true);
     try {
       const response = await api.post(
-        `${USER_API.GET_REPORT_CLIENT_TRANSACTION}`,
+        `${PARTNER_DASHBOARD.GET_REPORT_CLIENT_TRANSACTION}`,
         {
-          // token: token,
           search: search || "",
           mt5acc: mt5acc || "",
         },

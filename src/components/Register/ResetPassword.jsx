@@ -7,7 +7,6 @@ import api from "../../utils/axiosInstance";
 import { AUTH_API } from "../../utils/constants";
 
 const ResetPassword = () => {
-  const backendURL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const location = useLocation();

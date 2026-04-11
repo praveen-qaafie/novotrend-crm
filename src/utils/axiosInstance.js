@@ -79,7 +79,6 @@ api.interceptors.request.use(
 // Response Interceptor
 api.interceptors.response.use(
   async (response) => {
-    // console.log("response-api", response);
     try {
       const decrypted = decryptResponse(response?.data);
       const parsedData = JSON.parse(decrypted);
