@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { toast } from "react-toastify";
-// import axios from "axios";
 import { useSidebar } from "../../context/SidebarContext";
 import { useUserContext } from "../../context/userContext";
 import BackButton from "../../components/ui/BackButton";
@@ -16,7 +15,6 @@ import api from "../../utils/axiosInstance";
 const UsdtBep = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions } = useUserContext();
-  // const [token] = useState(localStorage.getItem("userToken"));
   const [bonusChecked, setBonusChecked] = useState(false);
   // const [selectedBonus, setSelectedBonus] = useState("");
   const [termsAndCondition, settermsAndCondition] = useState(false);
@@ -28,7 +26,6 @@ const UsdtBep = () => {
   const [getBonusDiscount, setGetBonusDiscount] = useState();
 
   const [inputFields, setInputFields] = useState({
-    // token,
     mt5accountselect: "",
     amount: "",
   });

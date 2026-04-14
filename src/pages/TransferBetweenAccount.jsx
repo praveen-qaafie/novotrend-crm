@@ -12,13 +12,10 @@ import { InputField } from "../components/Common/InputField";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
-const backendURL = import.meta.env.VITE_API_URL;
-
 export const TransferBetweenAccount = () => {
   const navigate = useNavigate();
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions, mt5_acc_list } = useUserContext();
-  // const token = localStorage.getItem("userToken");
   const [senderBalance, setSenderBalance] = useState();
   const [recieverBalance, setRecieverBalance] = useState();
   const [loading, setLoading] = useState(false);
@@ -30,7 +27,6 @@ export const TransferBetweenAccount = () => {
     amount: "",
     note: "",
     otp: "",
-    // token: token,
   });
 
   const [toastMessage, setToastMessage] = useState({
@@ -41,7 +37,6 @@ export const TransferBetweenAccount = () => {
   const otp_type = "transfer_between_account";
 
   const { sendOtp } = useSendOTP(
-    // token,
     toastOptions,
     setToastMessage,
     inputField?.amount,
@@ -75,7 +70,6 @@ export const TransferBetweenAccount = () => {
     setLoading(true);
 
     const body = {
-      // token: inputField.token,
       senderid: inputField.senderid,
       receiverid: inputField.receiverid,
       amount: inputField.amount,

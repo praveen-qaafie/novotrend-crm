@@ -4,7 +4,6 @@ import { Hr } from "../components/Common/Hr";
 import { MdPriorityHigh } from "react-icons/md";
 import { FiCheckCircle } from "react-icons/fi";
 import { useUserContext } from "../context/userContext";
-// import axios from "axios";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import BackButton from "../components/ui/BackButton";
@@ -13,13 +12,10 @@ import { useSendOTP } from "../hooks/useSendOTP";
 import api from "../utils/axiosInstance";
 import { USER_API } from "../utils/constants";
 
-// const backendURL = import.meta.env.VITE_API_URL;
-
 export const WithdrawCash = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
   const navigate = useNavigate();
   const { toastOptions, balanceData } = useUserContext();
-  // const token = localStorage.getItem("userToken");
   const userInfo = JSON.parse(localStorage.getItem("UserInfo"));
 
   const otp_type = "withdraw_cash_otp";
@@ -36,7 +32,6 @@ export const WithdrawCash = () => {
   });
 
   const { sendOtp } = useSendOTP(
-    // token,
     toastOptions,
     setToastMessage,
     inputFields?.amount,
@@ -57,7 +52,6 @@ export const WithdrawCash = () => {
     e.preventDefault();
     try {
       let body = {
-        // token: token,
         amount: inputFields.amount,
         remark: inputFields.remark,
         otp: inputFields.otp,

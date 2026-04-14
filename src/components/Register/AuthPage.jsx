@@ -26,7 +26,6 @@ const AuthPage = ({ isLogin = true }) => {
 
   const { data: countries = [] } = useCountry();
 
-  const user = localStorage.getItem("UserLogedIn") || false;
   const { partnerCode } = useParams();
   const [loginTabActive, setLoginTabActive] = useState(isLogin);
   const { toastOptions, userLogin } = useUserContext();
@@ -108,7 +107,6 @@ const AuthPage = ({ isLogin = true }) => {
 
       // handle both cases
       const apiData = user?.data || user;
-      console.log("login-apiData", apiData)
       setResponseError(apiData);
       if (apiData?.status === 200) {
         const authType = Number(apiData?.authType ?? 0);
@@ -243,7 +241,6 @@ const AuthPage = ({ isLogin = true }) => {
       const responseData = registerResp?.data?.data;
 
       if (responseData?.status === 200) {
-
         setIsLoading(false);
         if (responseData?.status === 200) {
           const token = responseData?.response?.token || responseData?.response;
@@ -287,8 +284,10 @@ const AuthPage = ({ isLogin = true }) => {
     }
   }, [partnerCode]);
 
-  if (user) {
-    return <Navigate to="/" replace />;
+  const isLoggedIn = localStorage.getItem("UserLogedIn");
+
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (

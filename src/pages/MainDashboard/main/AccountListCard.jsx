@@ -7,12 +7,6 @@ const AccountListCard = ({ accountData = [], onClickChangePassword }) => {
   const [expandedCard, setExpandedCard] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
 
-  if (!Array.isArray(accountData) || accountData.length === 0) {
-    return (
-      <div className="text-center text-gray-500 py-8">No accounts found.</div>
-    );
-  }
-
   return (
     <div className="max-w-full mx-auto space-y-4 px-2 sm:px-4 md:px-0 max-w-6xl">
       {accountData.map((account, idx) => (

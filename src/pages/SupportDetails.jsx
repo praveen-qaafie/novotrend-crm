@@ -30,8 +30,6 @@ const SupportDetails = () => {
     setInputFields((prev) => ({ ...prev, [name]: value }));
   };
 
-  console.log("ticketDetails", ticketDetails); 
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,10 +59,7 @@ const SupportDetails = () => {
         );
         const data = response.data?.data;
 
-        console.log("data", data); 
-
         if (data?.status === 200) {
-          console.log("data?.status === 200", data?.status === 200)
           const ticketArray = Array.isArray(data.response)
             ? data.response
             : [data.response];

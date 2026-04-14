@@ -1,4 +1,3 @@
-// import axios from "axios";
 import api from "./axiosInstance";
 
 export const apiRequest = async (url, payload = {}) => {

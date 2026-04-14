@@ -11,12 +11,10 @@ const OTP_LENGTH = 6;
 const EmailVerificationOTP = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const { toastOptions, initUserAfterRegister, clearCache } = useUserContext();
+  const { toastOptions, clearCache } = useUserContext();
 
   // get token
   const token = location.state?.token;
-  console.log("token-1", token);
 
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
   const [isLoading, setIsLoading] = useState(false);
@@ -32,11 +30,6 @@ const EmailVerificationOTP = () => {
 
   // Guard
   useEffect(() => {
-    if (localStorage.getItem("UserLogedIn")) {
-      navigate("/emailVerify");
-      return;
-    }
-
     if (!token) {
       toast.error("Invalid or expired verification access.", toastOptions);
       navigate("/register");
@@ -91,7 +84,6 @@ const EmailVerificationOTP = () => {
   // Check OTP complete
   const isOtpComplete = otp.every((digit) => digit !== "");
 
-  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -99,9 +91,7 @@ const EmailVerificationOTP = () => {
       toast.error("Please enter complete OTP", toastOptions);
       return;
     }
-
     setIsLoading(true);
-
     try {
       clearCache();
 
@@ -111,27 +101,28 @@ const EmailVerificationOTP = () => {
       });
 
       const responseData = response?.data?.data;
-      console.log("responseData", responseData);
-      console.log("token-2", responseData?.token?.usertoken); // token
 
       if (responseData?.status === 200) {
-        // await initUserAfterRegister();
-        toast.success(responseData.result || "OTP Verified!", toastOptions);
-
-        // Save AFTER success
-        localStorage.setItem("UserLogedIn", true);
-        localStorage.setItem(
-          "UserInfo",
-          JSON.stringify(responseData?.response),
-        );
         localStorage.setItem("userToken", token);
 
-        navigate("/login");
+        toast.success(
+          "Email verified successfully! Redirecting to login...",
+          toastOptions,
+        );
+
+        const timer = setTimeout(() => {
+          navigate("/login");
+        }, 2500);
+
+        return () => clearTimeout(timer);
       } else {
-        toast.error(responseData?.result || "Invalid OTP", toastOptions);
+        toast.error(
+          responseData?.result || "Invalid OTP. Please try again.",
+          toastOptions,
+        );
       }
     } catch (err) {
-      toast.error("Something went wrong", toastOptions);
+      toast.error("Verification failed. Please try again.", toastOptions);
     } finally {
       setIsLoading(false);
     }

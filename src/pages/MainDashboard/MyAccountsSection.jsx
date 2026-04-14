@@ -249,7 +249,7 @@ const MyAccountSection = () => {
             )}
           </div>
         ) : (
-          <div className="min-h-[200px] max-w-6xl">
+          <div>
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
                 <div className="text-lg text-gray-500">Loading Accounts...</div>

@@ -16,7 +16,9 @@ const Layout = ({ children }) => {
   const [showPromo, setShowPromo] = useState(false);
   const location = useLocation();
 
-  console.log("userInfo", userInfo);
+  const isAuthPage = ["/login", "/register", "/emailVerify"].includes(
+    location.pathname,
+  );
 
   const withoutPromotionCard = [
     "/transaction-history",
@@ -52,7 +54,7 @@ const Layout = ({ children }) => {
     );
   }
 
-  if (!isLoading && (!userInfo || !balanceData)) {
+  if (!isAuthPage && !isLoading && (!userInfo || !balanceData)) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div>

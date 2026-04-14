@@ -15,10 +15,8 @@ export const Cash = () => {
   const navigate = useNavigate();
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions } = useUserContext();
-  const token = localStorage.getItem("userToken");
 
   const [inputFields, setInputFields] = useState({
-    token: token,
     mt5accountselect: "",
     amount: "",
     remark: "",

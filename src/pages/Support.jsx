@@ -9,7 +9,6 @@ import api from "../utils/axiosInstance";
 export const Support = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions } = useUserContext();
-  const token = localStorage.getItem("userToken");
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [preview, setPreview] = useState("");
@@ -82,14 +81,12 @@ export const Support = () => {
       console.error("Error fetching categories:", error);
       toast.error("Error fetching support categories", toastOptions);
     }
-  }, [token, toastOptions]);
+  }, [toastOptions]);
 
   const selectedCategory = categories.find(
     (item) => item.s_category === inputFields.category,
   );
   const selectedMastId = selectedCategory ? selectedCategory.s_mast_id : "";
-
-  console.log("selectedMastId", selectedMastId)
 
   const AddSupportTicketData = async (e) => {
     e.preventDefault();
@@ -330,59 +327,90 @@ export const Support = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {supportTickets?.map((ticketData, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          {index + 1}
-                        </td>
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          {ticketData.s_date}
-                        </td>
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          {ticketData.ticket_name}
-                        </td>
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          {ticketData.s_question}
-                        </td>
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          {ticketData.s_file_name ? (
-                            <Link
-                              to={ticketData.s_file_name}
-                              target="_blank"
-                              className="inline-flex justify-center items-center border border-gray-300 rounded-lg overflow-hidden"
-                            >
-                              <img
-                                src={ticketData.s_file_name}
-                                alt="attachment"
-                                className="w-10 h-10 rounded-md"
-                              />
-                            </Link>
-                          ) : (
-                            "NA"
-                          )}
-                        </td>
-                        <td
-                          className={`font-semibold p-4 text-sm border border-gray-200
-                         ${
-                           ticketData.s_status === "Open"
-                             ? "text-green-600"
-                             : ticketData.s_status === "Closed"
-                               ? "text-red-600"
-                               : ""
-                         }`}
-                        >
-                          {ticketData.s_status}
-                        </td>
-                        <td className="p-4 text-sm text-gray-700 border border-gray-200">
-                          <Link
-                            to={`/support/support-detail/${ticketData.ticket_id}`}
-                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-2 rounded-lg transition"
+                    {supportTickets?.length > 0 ? (
+                      supportTickets.map((ticketData, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="p-4 text-sm text-gray-700 border border-gray-200">
+                            {index + 1}
+                          </td>
+                          <td className="p-4 text-sm text-gray-700 border border-gray-200">
+                            {ticketData.s_date}
+                          </td>
+                          <td className="p-4 text-sm text-gray-700 border border-gray-200">
+                            {ticketData.ticket_name}
+                          </td>
+                          <td className="p-4 text-sm text-gray-700 border border-gray-200">
+                            {ticketData.s_question}
+                          </td>
+                          <td className="p-4 text-center text-sm text-gray-700 border border-gray-200">
+                            {ticketData.s_file_name ? (
+                              <Link
+                                to={ticketData.s_file_name}
+                                target="_blank"
+                                className="inline-flex justify-center items-center border border-gray-300 rounded-lg overflow-hidden"
+                              >
+                                <img
+                                  src={ticketData.s_file_name}
+                                  alt="attachment"
+                                  className="w-10 text-center h-10 rounded-md"
+                                />
+                              </Link>
+                            ) : (
+                              "NA"
+                            )}
+                          </td>
+                          <td
+                            className={`font-semibold p-4 text-sm border border-gray-200
+                           ${
+                             ticketData.s_status === "Open"
+                               ? "text-green-600"
+                               : ticketData.s_status === "Closed"
+                                 ? "text-red-600"
+                                 : ""
+                           }`}
                           >
-                            Detail
-                          </Link>
+                            {ticketData.s_status}
+                          </td>
+                          <td className="p-4 text-sm text-gray-700 border border-gray-200">
+                            <Link
+                              to={`/support/support-detail/${ticketData.ticket_id}`}
+                              className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-2 rounded-lg transition"
+                            >
+                              Detail
+                            </Link>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7" className="p-10 text-center">
+                          <div className="flex flex-col items-center justify-center gap-3 text-gray-500">
+                            {/* Icon */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-12 h-12 text-gray-400"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M9 13h6m-6 4h6M9 9h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 
+                                2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
+                              />
+                            </svg>
+
+                            {/* Text */}
+                            <p className="text-sm font-medium">No Data Found</p>
+                            <p className="text-xs text-gray-400">
+                              You don’t have any support tickets yet.
+                            </p>
+                          </div>
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               )}

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { toast } from "react-toastify";
-// import axios from "axios";
 import { useSidebar } from "../../context/SidebarContext";
 import { useUserContext } from "../../context/userContext";
 import BackButton from "../../components/ui/BackButton";
@@ -13,13 +12,10 @@ import api from "../../utils/axiosInstance";
 // import HundredBonusTerms from "../Terms&condition/HundredBonusTerms";
 // import FiftyBonusTerms from "../Terms&condition/FiftyBonusTerms";
 
-// const backendURL = import.meta.env.VITE_API_URL;
-
 const UsdtBep = () => {
   const urlTrc = `${USER_API.WALLET_TRANS_TRC}`;
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions } = useUserContext();
-  // const [token] = useState(localStorage.getItem("userToken"));
   const [bonusChecked, setBonusChecked] = useState(false);
   // const [selectedBonus, setSelectedBonus] = useState("");
   const [termsAndCondition, settermsAndCondition] = useState(false);
@@ -32,7 +28,6 @@ const UsdtBep = () => {
   const [getBonusDiscount, setGetBonusDiscount] = useState();
 
   const [inputFields, setInputFields] = useState({
-    // token,
     mt5accountselect: "",
     amount: "",
   });

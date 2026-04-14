@@ -4,10 +4,8 @@ import { Outlet } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import PartnerSidebar from "../components/Sidebar/PartnerSidebar";
 import { useUserContext } from "../context/userContext";
-// const backendURL = import.meta.env.VITE_API_URL;
 
 const PartherDashboardLayout = () => {
-  // const token = localStorage.getItem("userToken");
   const { toggle, isMobile } = useSidebar();
   const { balanceData } = useUserContext();
   // const [balanceData, setBalanceData] = useState(null);

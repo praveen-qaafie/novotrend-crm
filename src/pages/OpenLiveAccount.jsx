@@ -2,21 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Hr } from "../components/Common/Hr";
 import { useUserContext } from "../context/userContext";
-// import axios from "axios";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import BackButton from "../components/ui/BackButton";
 import api from "../utils/axiosInstance";
 import { USER_API } from "../utils/constants";
 
-// const backendURL = import.meta.env.VITE_API_URL;
-
 export const OpenLiveAccount = () => {
   const { toggle, isMobile, setToggle } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
   const { toastOptions, fetchDashboardData } = useUserContext();
-  // const token = localStorage.getItem("userToken");
 
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +23,6 @@ export const OpenLiveAccount = () => {
   );
 
   const [inputField, setInputField] = useState({
-    // token: token,
     selectgroup: location.state?.selectedGroupId || "",
     nickName: "",
     accleverage: "",
@@ -148,7 +143,6 @@ export const OpenLiveAccount = () => {
     setIsSubmitting(true);
 
     const body = {
-      // token: inputField.token,
       selectgroup: selectedGroupId || inputField.selectgroup,
       accleverage: selectedLeverage,
       nickname: inputField.nickName,

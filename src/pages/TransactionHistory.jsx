@@ -174,7 +174,6 @@ const TransactionHistory = () => {
       const endpoint = apiEndpoint(activeTab);
       if (!endpoint) return;
       const userResponse = await api.post(`${endpoint}`, {
-        // token,
         mt5account: selectedAccount,
       });
       if (userResponse.data.data.status === 200) {

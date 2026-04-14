@@ -11,10 +11,8 @@ import useBankDetails from "../hooks/useBankDetails";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
-// const backendURL = import.meta.env.VITE_API_URL;
 
 export const BankTransfer = () => {
-  // const token = localStorage.getItem("userToken");
   const { data, loading } = useBankDetails(
     `${USER_API.GET_ADMIN_BANK_DETAILS}`,
     {

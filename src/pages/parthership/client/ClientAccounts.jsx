@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import axios from "axios";
 import { FiLoader, FiSearch } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import * as XLSX from "xlsx";
@@ -9,8 +8,6 @@ import api from "../../../utils/axiosInstance";
 import { USER_API } from "../../../utils/constants";
 
 export default function ClientAccounts() {
-  const backendURL = import.meta.env.VITE_API_URL;
-  // const token = localStorage.getItem("userToken");
 
   const [clientData, setClientData] = useState([]);
   const [summary, setSummary] = useState({
@@ -72,7 +69,6 @@ export default function ClientAccounts() {
           mt5acc: mt5acc || "",
           search: search || "",
           searchby_level: searchby_level || "",
-          // token: token || "",
         });
 
         const res = response.data.data.response;
@@ -90,7 +86,7 @@ export default function ClientAccounts() {
         setLoading(false);
       }
     },
-    [backendURL],
+    [],
   );
 
   useEffect(() => {
