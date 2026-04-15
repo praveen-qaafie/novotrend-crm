@@ -16,7 +16,7 @@ export const USER_API = {
   GET_DASHBOARD: "mainpages/get_dashboard.php",
   USER_BALANCE_DATA: "users/get_user_bal_data.php",
   GET_USER_DATA: "users/get_users.php",
-  MT5_ACCOUNT_LIST: "accounts/mt5_accounts_list.php", //
+  MT5_ACCOUNT_LIST: "accounts/mt5_accounts_list.php",
   REGISTER_IB: "register/register_ib.php",
   UPDATE_MT5_NICKNAME: "accounts/update_mt5_nickname.php",
   GET_ADMIN_BANK_DETAILS: "bank/get_admin_bank_details.php",
@@ -55,15 +55,14 @@ export const USER_API = {
   WALLET_TRANS_TRC: "wallet_trans_trc.php",
   WALLET_TRANS_BEP: "wallet_trans_bep.php",
   GET_DISCOUNT: "get_discounts.php",
-  REGISTER_OTP_VERIFY: "register/register_otp_verify.php", //
-  WITHDRAWS_IB_FUNDS_ADD_WALLET: "withdraws_ib_funds_add_wallet.php",
+  REGISTER_OTP_VERIFY: "register/register_otp_verify.php",
   ADD_DEPOSIT_BONUS: "deposit/add_deposit_bonus.php",
   GET_ACTIVE_USER_BONUS: "users/get_active_user_bonus.php",
   CANCEL_ACTIVE_BONUS: "extra/cancel_active_bonus.php",
   DEPOSIT_FUNDS_ADD_WALLET_BAL: "deposit/deposit_funds_add_wallet_bal.php",
   OPEN_LIVE_ACCOUNT_ADD: "accounts/open_live_account_add.php",
   UPDATE_USER: "users/update_user.php",
-  UPDATE_ONLY_EMAIL: "update_only_email.php", // NOT USING 
+  UPDATE_ONLY_EMAIL: "update_only_email.php", // NOT USING
   UPDATE_ONLY_MOBILE_NO: "users/update_only_mobileno.php",
   GET_CLIENT_ACCOUNTS: "partner_dashboard/get_client_accounts.php",
   GET_ALL_WALLET_HISTORY: "transaction_history/get_all_wallet_history.php",
@@ -78,6 +77,7 @@ export const PARTNER_DASHBOARD = {
   GET_REPORT_REWARD_HISTORY: "partner_dashboard/get_report_reward_history.php",
   GET_REBATES_CLIENT: "partner_dashboard/get_rebates_client.php",
   GET_IB_COMMISSION: "partner_dashboard/get_ib_comm.php",
+  WITHDRAWS_IB_FUNDS_ADD_WALLET: "withdraw/withdraws_ib_funds_add_wallet.php",
   GET_REPORT_CLIENT_TRANSACTION:
     "partner_dashboard/get_report_client_transaction.php",
   GET_IB_ALL_COMMISSION: "partner_dashboard/get_ib_all_comm_history.php",

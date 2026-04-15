@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../utils/api";
 import { PARTNER_DASHBOARD } from "../utils/constants";
 
-export default function useIBCommission(backendURL, token) {
+export default function useIBCommission() {
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [totalCommission, setTotalCommission] = useState(0);
@@ -26,7 +26,9 @@ export default function useIBCommission(backendURL, token) {
 
   // Fetch total commission
   const fetchTotalCommission = async () => {
-    const { data, error } = await apiRequest(`${PARTNER_DASHBOARD.GET_IB_COMMISSION}`);
+    const { data, error } = await apiRequest(
+      `${PARTNER_DASHBOARD.GET_IB_COMMISSION}`,
+    );
     if (data) {
       setTotalCommission(parseFloat(data?.data?.response?.total_ib_commission));
     }
@@ -42,8 +44,8 @@ export default function useIBCommission(backendURL, token) {
     setError("");
     setLoading(true);
     const { error } = await apiRequest(
-      `${USER_API.WITHDRAWS_IB_FUNDS_ADD_WALLET}`,
-      { token, amount },
+      `${PARTNER_DASHBOARD.WITHDRAWS_IB_FUNDS_ADD_WALLET}`,
+      { amount },
     );
     setLoading(false);
 
@@ -59,11 +61,11 @@ export default function useIBCommission(backendURL, token) {
 
   // Load initial data
   useEffect(() => {
-    if (token) {
-      fetchHistory();
-      fetchTotalCommission();
-    }
-  }, [token]);
+    const token = localStorage.getItem("userToken");
+    if (!token) return;
+    fetchHistory();
+    fetchTotalCommission();
+  }, []);
 
   return {
     loading,

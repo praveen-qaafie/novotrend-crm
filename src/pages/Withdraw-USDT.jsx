@@ -12,7 +12,6 @@ import { MdPriorityHigh } from "react-icons/md";
 import api from "../utils/axiosInstance";
 import { USER_API } from "../utils/constants";
 
-
 export const WithdrawUSDT = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
   const navigate = useNavigate();
@@ -226,7 +225,7 @@ export const WithdrawUSDT = () => {
                       !inputField.amount ||
                       Number(inputField.amount) > Number(balanceData?.balance)
                     }
-                    className="px-4 py-2 border rounded-lg bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
+                    className="px-4 py-2 border rounded-lg bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50 cursor-not-allowed"
                   >
                     Send OTP
                   </button>
@@ -269,7 +268,7 @@ export const WithdrawUSDT = () => {
                       Number(inputField.amount) > Number(balanceData?.balance)
                     }
                     type="submit"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 cursor-not-allowed"
                   >
                     Confirm OTP
                   </button>

@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import api from "../utils/axiosInstance";
 import { AUTH_API, USER_API } from "../utils/constants";
+import { parse, format } from "date-fns";
 
 export const ActiveUserContext = createContext("");
 
@@ -14,7 +15,6 @@ const UserContextProvider = ({ children }) => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: false,
-    progress: undefined,
   };
 
   const [userInfo, setUserInfo] = useState(null);
@@ -24,132 +24,82 @@ const UserContextProvider = ({ children }) => {
   const [partnerData, setPartnerData] = useState(null);
   const [mt5_acc_list, setMt5_acc_list] = useState([]);
 
-  const getMt5Acc = async () => {
+  // Generic API handler
+  const handleApi = async (apiCall, setter, errorMsg) => {
     try {
-      const resp = await api.post(`${USER_API.MT5_ACCOUNT_LIST}`);
+      const response = await apiCall();
+      const apiResp = response?.data?.data;
 
-      const apiResp = resp.data.data;
-
-      if (apiResp.status === 200) {
-        setMt5_acc_list(apiResp.response || []);
+      if (apiResp?.status === 200) {
+        setter && setter(apiResp.response || []);
         return apiResp.response;
       } else {
-        toast.error(
-          apiResp.result || "Failed to load MT5 accounts",
-          toastOptions,
-        );
-        setMt5_acc_list([]);
-        return [];
+        toast.error(apiResp?.result || errorMsg, toastOptions);
+        return null;
       }
     } catch (error) {
-      console.error("MT5 account fetch error:", error);
-      toast.error("Could not load MT5 accounts", toastOptions);
-      setMt5_acc_list([]);
-      return [];
+      console.error(errorMsg, error);
+      toast.error(errorMsg, toastOptions);
+      return null;
     }
   };
 
-  // Dashboard data fetching
-  const fetchDashboardData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api.post(`${USER_API.GET_DASHBOARD}`);
-      if (response.data.data?.status === 200) {
-        const data = response.data.data.response;
-        setDashboardData(data);
-        return data;
-      } else {
-        throw new Error(
-          response.data.data?.result || "Failed to fetch dashboard data",
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      toast.error("Failed to load dashboard data", toastOptions);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const getMt5Acc = () =>
+    handleApi(
+      () => api.post(`${USER_API.MT5_ACCOUNT_LIST}`),
+      setMt5_acc_list,
+      "Failed to load MT5 accounts",
+    );
 
-  // Balance data fetching
-  const fetchBalanceData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api.post(`${USER_API.USER_BALANCE_DATA}`);
-      if (response.data.data?.status === 200) {
-        const data = response.data.data.response;
-        setBalanceData(data);
-        return data;
-      } else {
-        throw new Error(
-          response.data.data?.result || "Failed to fetch balance data",
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching balance data:", error);
-      toast.error("Failed to load balance data", toastOptions);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const fetchDashboardData = () =>
+    handleApi(
+      () => api.post(`${USER_API.GET_DASHBOARD}`),
+      setDashboardData,
+      "Failed to load dashboard data",
+    );
 
-  // User data fetching
-  const fetchUserData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api.post(`${USER_API.GET_USER_DATA}`);
-      if (response.data.data?.status === 200) {
-        const data = response.data.data.response;
-        setUserInfo(data);
-        return data;
-      } else {
-        throw new Error(
-          response.data.data?.result || "Failed to fetch user data",
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      toast.error("Failed to load user data", toastOptions);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const fetchBalanceData = () =>
+    handleApi(
+      () => api.post(`${USER_API.USER_BALANCE_DATA}`),
+      setBalanceData,
+      "Failed to load balance data",
+    );
 
+  const fetchUserData = () =>
+    handleApi(
+      () => api.post(`${USER_API.GET_USER_DATA}`),
+      setUserInfo,
+      "Failed to load user data",
+    );
+
+  // init after register (safe)
   const initUserAfterRegister = async () => {
-    try {
-      await Promise.all([
+    await Promise.allSettled([
+      fetchDashboardData(),
+      fetchBalanceData(),
+      fetchUserData(),
+    ]);
+  };
+
+  // optimized initial load
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    if (!token) return;
+
+    setIsLoading(true);
+
+    // user-data first
+    fetchUserData().finally(() => {
+      // background APIs
+      Promise.allSettled([
         fetchDashboardData(),
         fetchBalanceData(),
-        fetchUserData(),
-      ]);
-    } catch (err) {
-      console.error("Init user after register failed:", err);
-    }
-  };
-
-  useEffect(() => {
-    const initializeData = async () => {
-      try {
-        await Promise.all([
-          fetchDashboardData(),
-          fetchBalanceData(),
-          fetchUserData(),
-          getMt5Acc(),
-        ]);
-      } catch (error) {
-        console.error("Error initializing data:", error);
-      }
-    };
-
-    if (localStorage.getItem("userToken")) {
-      initializeData();
-    }
+        getMt5Acc(),
+      ]).finally(() => setIsLoading(false));
+    });
   }, []);
 
-  // Clear data when user logs out
+  // Clear data
   const clearCache = () => {
     setDashboardData(null);
     setBalanceData(null);
@@ -157,58 +107,61 @@ const UserContextProvider = ({ children }) => {
     setMt5_acc_list([]);
   };
 
+  // LOGIN
   const userLogin = async ({ email, password }) => {
     try {
+      setIsLoading(true);
+
       const response = await api.post(`${AUTH_API.LOGIN}`, {
         email,
         password,
       });
 
-      // handle both structures
       const apiData = response?.data?.data || response?.data;
 
       if (apiData?.status === 200) {
         const token = apiData?.response;
 
-        // store user + token
-        setUserInfo(apiData);
-        localStorage.setItem("UserInfo", JSON.stringify(apiData));
         localStorage.setItem("userToken", token);
+        localStorage.setItem("UserInfo", JSON.stringify(apiData));
 
         clearCache();
 
-        // preload user data
-        await Promise.all([
+        // Critical API
+        await fetchUserData();
+
+        // Background APIs
+        Promise.allSettled([
           fetchDashboardData(),
           fetchBalanceData(),
-          fetchUserData(),
           getMt5Acc(),
         ]);
+
+        return apiData;
       } else {
         localStorage.clear();
         clearCache();
+        return apiData;
       }
-
-      //  ALWAYS return clean structure
-      return apiData;
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login failed! Please try again.", toastOptions);
-
-      // return safe fallback
       return {
         status: 500,
         result: "Something went wrong",
       };
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // forgotPassword function
+  // Forgot-password 
   const ForgotPass = async ({ email }) => {
     try {
       const { data } = await api.post(`${AUTH_API.FORGOT_PASSWORD}`, {
         email,
       });
+
       if (data?.data?.status === 200) {
         toast.success(data?.data?.result, toastOptions);
       } else {
@@ -218,55 +171,46 @@ const UserContextProvider = ({ children }) => {
       console.error("Forgot password error:", error);
     }
   };
-
+  
+  // date formate 
   const formatDate = (dateString) => {
-    const [day, month, year] = dateString.split("-");
-    return `${year}-${month}-${day}`;
+    const parsedDate = parse(dateString, "dd-MM-yyyy", new Date());
+    return format(parsedDate, "yyyy-MM-dd");
   };
-
+  
+  // for partner-dashboard
   const becomePartner = async (accept) => {
     setIsLoading(true);
-    const payload = {
-      term_accept: accept ? 1 : 0,
-    };
+    const payload = { term_accept: accept ? 1 : 0 };
+
     try {
       const { data } = await api.post(`${USER_API.REGISTER_IB}`, payload);
       const apiData = data?.data;
+
       if (apiData?.status === 200) {
         setPartnerData(apiData);
-        toast.success(
-          apiData.result || "Registration successful!",
-          toastOptions,
-        );
+        toast.success(apiData.result, toastOptions);
         return apiData;
       }
 
       if (apiData?.status === 202) {
-        toast.info(apiData?.result, toastOptions);
+        toast.info(apiData.result, toastOptions);
         return apiData;
       }
 
       if (apiData?.status === 400 && apiData?.result?.includes("Already")) {
         setPartnerData(apiData);
-        toast.info(apiData.result || "You are already a partner", toastOptions);
+        toast.info(apiData.result, toastOptions);
         return apiData;
       }
 
-      toast.error(
-        apiData?.result || "Unexpected response from server",
-        toastOptions,
-      );
+      toast.error(apiData?.result, toastOptions);
     } catch (error) {
       console.error("Become partner error:", error);
-      toast.error(
-        error.response?.data?.data?.result || "Failed to process your request.",
-        toastOptions,
-      );
+      toast.error("Failed to process request", toastOptions);
       throw error;
     } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 600);
+      setTimeout(() => setIsLoading(false), 600);
     }
   };
 

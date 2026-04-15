@@ -132,6 +132,8 @@ export const UpdateBankAccount = () => {
     try {
       const userResponse = await api.post(`${USER_API.GET_BANK_DETAILS}`);
 
+      console.log("userResponse", userResponse); 
+
       if (userResponse.data.data.status === 200) {
         const resp = userResponse.data.data.response;
         setInputFields({
@@ -246,7 +248,7 @@ export const UpdateBankAccount = () => {
     formData.append("ifsc", inputFields.ifsc);
     formData.append("iban_number", inputFields.iban_number);
     formData.append("bankaddress", inputFields.bankaddress);
-    // formData.append("kyc_bank_country", "1"); // not using 
+    // formData.append("kyc_bank_country", "1"); // not using
 
     if (kycBankImageFile) {
       formData.append("kyc_bank_image", kycBankImageFile);

@@ -8,8 +8,7 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("userToken");
-
-    // token attach 
+    // token attach
     if (token) {
       if (config.method === "get") {
         config.params = {
@@ -47,7 +46,7 @@ api.interceptors.request.use(
           }
         });
 
-        // console raw payload 
+        // console raw payload
         console.log("RAW PAYLOAD (NO FILE):", rawPayload);
 
         const encrypted = await encryptPayload(rawPayload);
@@ -66,7 +65,6 @@ api.interceptors.request.use(
 
         console.log("RAW PAYLOAD:", rawPayload);
         const encrypted = await encryptPayload(rawPayload);
-        // console.log("ENCRYPTED PAYLOAD:", encrypted);
         config.data = { data: encrypted };
       }
     }
@@ -82,7 +80,6 @@ api.interceptors.response.use(
     try {
       const decrypted = decryptResponse(response?.data);
       const parsedData = JSON.parse(decrypted);
-      console.log("parsedData", parsedData);
       response.data = parsedData;
 
       return response;

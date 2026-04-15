@@ -244,7 +244,7 @@ export const WalletToMT5 = () => {
                       Number(inputField.amount) > Number(balanceData?.balance)
                     }
                     onClick={sendOtp}
-                    className="px-4 py-2 border rounded-lg bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
+                    className="px-4 py-2 border rounded-lg bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50 cursor-not-allowed"
                   >
                     Send OTP
                   </button>
@@ -290,7 +290,7 @@ export const WalletToMT5 = () => {
                         Number(inputField.amount) > Number(balanceData?.balance)
                       }
                       type="submit"
-                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 cursor-not-allowed "
                     >
                       Confirm OTP
                     </button>

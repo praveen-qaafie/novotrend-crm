@@ -3,13 +3,12 @@ import useIBCommission from "../hooks/useIBCommission";
 import { format } from "date-fns";
 
 export default function IBCommission() {
-  const backendURL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("userToken");
 
   const [amount, setAmount] = useState("");
 
   const { loading, error, tableData, totalCommission, withdrawCommission } =
-    useIBCommission(backendURL, token);
+    useIBCommission(token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

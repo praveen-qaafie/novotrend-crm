@@ -103,8 +103,6 @@ const EmailVerificationOTP = () => {
       const responseData = response?.data?.data;
 
       if (responseData?.status === 200) {
-        localStorage.setItem("userToken", token);
-
         toast.success(
           "Email verified successfully! Redirecting to login...",
           toastOptions,

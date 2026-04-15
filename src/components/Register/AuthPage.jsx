@@ -253,7 +253,7 @@ const AuthPage = ({ isLogin = true }) => {
           localStorage.setItem(
             "UserInfo",
             JSON.stringify(responseData?.response),
-          );
+          ); // 
 
           navigate("/emailVerify", {
             state: { token },

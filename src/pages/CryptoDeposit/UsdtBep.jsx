@@ -12,7 +12,6 @@ import api from "../../utils/axiosInstance";
 // import HundredBonusTerms from "../Terms&condition/HundredBonusTerms ";
 // import FiftyBonusTerms from "../Terms&condition/FiftyBonusTerms ";
 
-
 const UsdtBep = () => {
   const urlBEP = `${USER_API.WALLET_TRANS_BEP}`;
   const { toggle, setToggle, isMobile } = useSidebar();
@@ -48,9 +47,7 @@ const UsdtBep = () => {
   // Not using currently
   // const fetchBonusDiscount = async () => {
   //   try {
-  //     const response = await axios.post(`${backendURL}/get_discounts.php`, {
-  //       token: token,
-  //     });
+  //     const response = await api.post(`/get_discounts.php`);
   //     setGetBonusDiscount(response.data);
   //   } catch (err) {
   //     console.error("err -------->", err);
@@ -58,7 +55,6 @@ const UsdtBep = () => {
   // };
 
   // useEffect(() => {
-  //   getMt5Acc();
   //   fetchBonusDiscount();
   // }, []);
 

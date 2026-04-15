@@ -99,7 +99,7 @@ const SupportDetails = () => {
 
     try {
       const response = await api.post(
-        `${USER_API.ADD_REMARK_CREATE_SUPPORT_TICKET}`, // this ?
+        `${USER_API.ADD_REMARK_CREATE_SUPPORT_TICKET}`,
         formData,
       );
 
@@ -332,7 +332,7 @@ const SupportDetails = () => {
 
                           {isUser && (
                             <img
-                              src={elem?.user_img}
+                              src={elem?.s_file_name}
                               alt="avatar"
                               className="w-9 h-9 rounded-full ml-3 border border-gray-200 shadow-sm"
                             />
