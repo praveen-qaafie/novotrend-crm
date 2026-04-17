@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Avatar from "../assets/img/Avatar.png";
 import { Hr } from "../components/Common/Hr";
 import { InputField } from "../components/Common/InputField";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
@@ -33,7 +33,6 @@ export const Settings = () => {
       number: "",
     },
   });
-
 
   const [initialFields, setInitialFields] = useState(null);
   const [errors, setErrors] = useState({});
@@ -308,7 +307,7 @@ export const Settings = () => {
 
     try {
       const body = {
-        country: inputFields.mobile.country_id, // 
+        country: inputFields.mobile.country_id, //
         mobileno: inputFields.mobile.number,
       };
       const response = await api.post(
@@ -317,7 +316,7 @@ export const Settings = () => {
       );
       if (response.data.data.status === 200) {
         toast.success(response.data.data.result, toastOptions);
-        getUser(); // 
+        getUser(); //
         await fetchUserData(true);
         setErrors({});
       } else {

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { InputField } from "../components/Common/InputField";
 import { FiCheckCircle } from "react-icons/fi";
 import { Hr } from "../components/Common/Hr";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import { useSendOTP } from "../hooks/useSendOTP";

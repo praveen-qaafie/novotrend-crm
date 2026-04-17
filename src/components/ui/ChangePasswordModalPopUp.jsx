@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { toast } from "react-toastify";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 import { AUTH_API, USER_API } from "../../utils/constants";
 import api from "../../utils/axiosInstance";
 
@@ -12,7 +12,6 @@ const ChangePasswordModalPopup = ({
   accountData,
   NickName,
 }) => {
-
   const { toastOptions, fetchDashboardData } = useUserContext();
   const [passwordType, setPasswordType] = useState("main");
   const [mainPassword, setMainPassword] = useState("");

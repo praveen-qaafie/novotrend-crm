@@ -3,7 +3,7 @@ import { PartnerHeader } from "../components/Header/PartnerHeader";
 import { Outlet } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import PartnerSidebar from "../components/Sidebar/PartnerSidebar";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 
 const PartherDashboardLayout = () => {
   const { toggle, isMobile } = useSidebar();

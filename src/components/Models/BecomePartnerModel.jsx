@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 
 const BecomePartnerModal = ({ onClose }) => {
   const { becomePartner, loading, fetchBalanceData, partnerData } =

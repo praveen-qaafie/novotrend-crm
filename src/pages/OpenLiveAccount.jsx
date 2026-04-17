@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Hr } from "../components/Common/Hr";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import BackButton from "../components/ui/BackButton";

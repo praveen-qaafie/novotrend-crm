@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import AuthPageImage from "../../assets/img/AuthUserPage.webp";
 import { MdEmail } from "react-icons/md";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaEye, FaEyeSlash, FaMobileAlt } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Hr } from "../components/Common/Hr";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import { useNavigate } from "react-router-dom";
@@ -131,8 +131,6 @@ export const UpdateBankAccount = () => {
   const getBankDetail = async () => {
     try {
       const userResponse = await api.post(`${USER_API.GET_BANK_DETAILS}`);
-
-      console.log("userResponse", userResponse); 
 
       if (userResponse.data.data.status === 200) {
         const resp = userResponse.data.data.response;

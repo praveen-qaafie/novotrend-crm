@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { useSidebar } from "../context/SidebarContext";
 import { MyAccountSection } from "./MainDashboard";
 

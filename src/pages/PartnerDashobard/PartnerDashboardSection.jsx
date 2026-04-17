@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { IoIosLink } from "react-icons/io";
 import { TbWallet } from "react-icons/tb";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 import { IoIosShareAlt } from "react-icons/io";
 import ShareModal from "../../components/ui/SharePopup";
 import PartnerLevelsPopup from "../../components/ui/PartnerLevelsPopup";

@@ -4,7 +4,7 @@ import { BiSupport } from "react-icons/bi";
 import { Header } from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { useSidebar } from "../context/SidebarContext";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import PromotionCard from "../components/ui/PromotionCard";
 import DashboardSidebar from "../components/Sidebar/DashboardSidebar";
 // import NotificationModal from "../components/Notification/NotificationModal";

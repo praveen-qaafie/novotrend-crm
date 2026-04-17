@@ -6,7 +6,7 @@ import {
   PartnerLoyaltyProgram,
 } from "./PartnerDashobard";
 import { toast } from "react-toastify";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { PARTNER_DASHBOARD } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
@@ -61,7 +61,7 @@ function PartherDashboard() {
   useEffect(() => {
     getIbDashboard();
   }, []);
-  
+
   return (
     <div className="w-full h-auto">
       {/* ProgressStepper Progress Section */}

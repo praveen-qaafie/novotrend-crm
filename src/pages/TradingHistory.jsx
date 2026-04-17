@@ -5,13 +5,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from "../components/Common/Pagination";
 import { HiArrowNarrowUp, HiArrowNarrowDown } from "react-icons/hi";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
-
 
 const TradingHistory = () => {
   const { toggle, setToggle, isMobile } = useSidebar();
@@ -199,13 +198,11 @@ const TradingHistory = () => {
   // };
 
   // Fetch data on mount & filter change
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getDealHistory();
   }, []);
 
   // Update total pages when rowsPerPage changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setTotalPage(Math.ceil(allDealHistory.length / rowsPerPage));
     setCurrentPage(1);

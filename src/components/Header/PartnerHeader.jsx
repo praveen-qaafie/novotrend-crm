@@ -7,7 +7,7 @@ import { LuWallet } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { FaPeopleGroup } from "react-icons/fa6";
-// import { ActiveUserContext } from "../../context/userContext";
+// import { ActiveUserContext } from "../../context/useUserContext";
 import { IoMenu, IoCloseSharp } from "react-icons/io5";
 import {
   FaRegBell,
@@ -25,7 +25,7 @@ import { useState } from "react";
 import { maskEmail } from "../../utils/makingEmail";
 import useLogoutHandler from "../../hooks/useLogout";
 import { PARTNER_DASHBOARD } from "../../utils/constants";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 
 export const PartnerHeader = ({ balanceData, setHideBalance, HideBalance }) => {
   const { userInfo } = useUserContext();

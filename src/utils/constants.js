@@ -90,5 +90,3 @@ export const USER_NOTIFICATION = {
   READ_NOTIFICATION: "users/read_user_notification.php",
   GET_NOTIFICATION: "users/get_user_notification.php",
 };
-
-// /users/get_admin_bank_details.php

@@ -4,7 +4,7 @@ import { InputField } from "../components/Common/InputField";
 import { toast } from "react-toastify";
 import { MdPriorityHigh } from "react-icons/md";
 import { FiCheckCircle } from "react-icons/fi";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { useSidebar } from "../context/SidebarContext";
 import { useNavigate } from "react-router-dom";
 import { useSendOTP } from "../hooks/useSendOTP";

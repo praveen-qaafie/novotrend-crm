@@ -5,7 +5,7 @@ import { useSidebar } from "../context/SidebarContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from "../components/Common/Pagination";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
@@ -60,7 +60,6 @@ const TransactionHistory = () => {
   }, [isOpen]);
 
   // Set tab from URL param
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const tabParam = searchParams.get("tab");
@@ -154,19 +153,18 @@ const TransactionHistory = () => {
   const apiEndpoint = (tab) => {
     switch (tab) {
       case "All Transaction":
-        return `${USER_API.GET_ALL_ORDER_REPORT_HISTORY}`;
+        return `${USER_API.GET_ALL_WALLET_HISTORY}`;
       case "Deposit":
         return `${USER_API.GET_ALL_DEPOSIT_HISTORY}`;
       case "Withdrawal":
         return `${USER_API.GET_ALL_WITHDRAW_HISTORY}`;
       case "Transfer":
-        return "transaction_history/get_all_transfer_history.php";
+        return `${USER_API.GET_ALL_TRANSFER_HISTORY}`;
       default:
         return null;
     }
   };
 
-  // after API test
   // --- Data Fetching ---
   const getAllWalletHistory = async () => {
     try {

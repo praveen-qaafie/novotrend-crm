@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../utils/axiosInstance";
 import { AUTH_API, USER_API } from "../utils/constants";
-import { parse, format } from "date-fns";
-
-export const ActiveUserContext = createContext("");
+import { ActiveUserContext } from "./ActiveUserContext";
+import { formatDate } from "../utils/userHelpers";
 
 const UserContextProvider = ({ children }) => {
   const toastOptions = {
@@ -72,7 +71,7 @@ const UserContextProvider = ({ children }) => {
       "Failed to load user data",
     );
 
-  // init after register (safe)
+  // init after register
   const initUserAfterRegister = async () => {
     await Promise.allSettled([
       fetchDashboardData(),
@@ -81,14 +80,13 @@ const UserContextProvider = ({ children }) => {
     ]);
   };
 
-  // optimized initial load
+  // initial load
   useEffect(() => {
     const token = localStorage.getItem("userToken");
     if (!token) return;
 
     setIsLoading(true);
 
-    // user-data first
     fetchUserData().finally(() => {
       // background APIs
       Promise.allSettled([
@@ -127,10 +125,8 @@ const UserContextProvider = ({ children }) => {
 
         clearCache();
 
-        // Critical API
         await fetchUserData();
 
-        // Background APIs
         Promise.allSettled([
           fetchDashboardData(),
           fetchBalanceData(),
@@ -170,12 +166,6 @@ const UserContextProvider = ({ children }) => {
     } catch (error) {
       console.error("Forgot password error:", error);
     }
-  };
-
-  // date formate
-  const formatDate = (dateString) => {
-    const parsedDate = parse(dateString, "dd-MM-yyyy", new Date());
-    return format(parsedDate, "yyyy-MM-dd");
   };
 
   // for partner-dashboard
@@ -241,11 +231,3 @@ const UserContextProvider = ({ children }) => {
 };
 
 export default UserContextProvider;
-
-export const useUserContext = () => {
-  const context = useContext(ActiveUserContext);
-  if (!context) {
-    throw new Error("useUserContext must be used within ActiveUserProvider");
-  }
-  return context;
-};

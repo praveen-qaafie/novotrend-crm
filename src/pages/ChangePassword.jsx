@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Hr } from "../components/Common/Hr";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { toast } from "react-toastify";
 import { useSidebar } from "../context/SidebarContext";
 import useLogoutHandler from "../hooks/useLogout";

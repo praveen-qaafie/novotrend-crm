@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 import { toast } from "react-toastify";
 import api from "../../utils/axiosInstance";
 import { AUTH_API, USER_API } from "../../utils/constants";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { useSidebar } from "../context/SidebarContext";
 import { toast } from "react-toastify";
 import BackButton from "../components/ui/BackButton";
@@ -11,7 +11,6 @@ import useBankDetails from "../hooks/useBankDetails";
 import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
 
-
 export const BankTransfer = () => {
   const { data, loading } = useBankDetails(
     `${USER_API.GET_ADMIN_BANK_DETAILS}`,
@@ -19,8 +18,6 @@ export const BankTransfer = () => {
       method: "POST",
     },
   );
-
-  console.log("Bank Details Data:", data); 
 
   const navigate = useNavigate();
   const { toggle, setToggle, isMobile } = useSidebar();

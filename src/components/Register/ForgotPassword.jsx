@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 import { toast } from "react-toastify";
 import { MdEmail } from "react-icons/md";
 import LoginImage from "../../assets/img/AuthUserPage.webp";

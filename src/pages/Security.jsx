@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { InputField } from "../components/Common/InputField";
 import { Hr } from "../components/Common/Hr";
 import { useSidebar } from "../context/SidebarContext";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { toast } from "react-toastify";
 import { AUTH_API, USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Hr } from "../components/Common/Hr";
 import { toast } from "react-toastify";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/useUserContext";
 import { useSidebar } from "../context/SidebarContext";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/ui/BackButton";
@@ -9,7 +9,6 @@ import { USER_API } from "../utils/constants";
 import api from "../utils/axiosInstance";
 // import HundredBonusTerms from "./Terms&condition/HundredBonusTerms ";
 // import FiftyBonusTerms from "./Terms&condition/FiftyBonusTerms ";
-
 
 export const Cash = () => {
   const navigate = useNavigate();

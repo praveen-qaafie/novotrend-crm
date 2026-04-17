@@ -11,7 +11,7 @@ import {
 import ChangePasswordModalPopup from "../../components/ui/ChangePasswordModalPopUp";
 import { AccountListCard } from "../../components/Dashboard";
 import AccountGridCard from "./main/AccountGridCard";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 
 const MyAccountSection = () => {
   const [activeTab, setActiveTab] = useState("Real");

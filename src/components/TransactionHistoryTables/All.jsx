@@ -43,24 +43,24 @@ const TransactionTableAll = ({ data }) => (
               className="hover:bg-gray-50 transition-colors duration-200"
             >
               <td className="border border-gray-200 px-3 py-3 text-center text-sm text-gray-700">
-                {transaction.Srno}
+                {transaction.srno}
               </td>
               <td className="border border-gray-200 px-3 py-3 text-center text-sm text-gray-700">
                 {transaction.date}
               </td>
               <td className="border border-gray-200 px-3 py-3 text-center text-sm text-gray-700">
-                {transaction.Details}
+                {transaction.details}
               </td>
               <td className="border border-gray-200 px-3 py-3 text-center text-sm text-gray-700">
-                {transaction.Credit}
+                {transaction.credit}
               </td>
               <td className="border border-gray-200 px-3 py-3 text-center text-sm text-gray-700">
-                {transaction.Debit}
+                {transaction.debit}
               </td>
               <td className="border border-gray-200 px-3 py-3 text-center text-sm font-medium">
                 <span
                   className={`px-3 py-1 rounded-full text-xs ${
-                    Number(transaction.Balance) < 0
+                    Number(transaction.balance) < 0
                       ? "bg-[#FEF3F2] text-[#B42318]"
                       : "bg-[#ECFDF3] text-[#027A48]"
                   }`}

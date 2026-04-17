@@ -35,7 +35,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import useLogoutHandler from "../../hooks/useLogout";
 import BecomePartnerModal from "../Models/BecomePartnerModel";
 import { toast } from "react-toastify";
-import { useUserContext } from "../../context/userContext";
+import { useUserContext } from "../../context/useUserContext";
 
 export default function DashboardSidebar({
   user = {},
