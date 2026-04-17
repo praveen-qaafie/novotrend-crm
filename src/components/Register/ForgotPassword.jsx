@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import { MdEmail } from "react-icons/md";
-import LoginImage from "../../assets/img/AuthUserPage.jpg";
+import LoginImage from "../../assets/img/AuthUserPage.webp";
 
 const ForgotPassword = () => {
   const { toastOptions, ForgotPass } = useUserContext();

@@ -5,7 +5,7 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import AuthPageImage from "../../assets/img/AuthUserPage.jpg";
+import AuthPageImage from "../../assets/img/AuthUserPage.webp";
 import { MdEmail } from "react-icons/md";
 import { useUserContext } from "../../context/userContext";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -253,7 +253,7 @@ const AuthPage = ({ isLogin = true }) => {
           localStorage.setItem(
             "UserInfo",
             JSON.stringify(responseData?.response),
-          ); // 
+          ); //
 
           navigate("/emailVerify", {
             state: { token },

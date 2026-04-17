@@ -19,6 +19,9 @@ export const BankTransfer = () => {
       method: "POST",
     },
   );
+
+  console.log("Bank Details Data:", data); 
+
   const navigate = useNavigate();
   const { toggle, setToggle, isMobile } = useSidebar();
   const { toastOptions, balanceData } = useUserContext();

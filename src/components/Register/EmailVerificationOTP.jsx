@@ -4,7 +4,7 @@ import { useUserContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import api from "../../utils/axiosInstance";
 import { AUTH_API, USER_API } from "../../utils/constants";
-import LoginImage from "../../assets/img/AuthUserPage.jpg";
+import LoginImage from "../../assets/img/AuthUserPage.webp";
 
 const OTP_LENGTH = 6;
 

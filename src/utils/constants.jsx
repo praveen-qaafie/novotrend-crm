@@ -41,7 +41,7 @@ export const USER_API = {
   GET_ALL_ORDER_REPORT_HISTORY:
     "transaction_history/all_get_order_report_history.php",
   MT5_TO_MT5_TRANSFER: "transfer_between/mt5_to_mt5_tranfer_api.php",
-  GET_BANK_DETAILS: "bank/get_bank.php", //
+  GET_BANK_DETAILS: "bank/get_bank.php",
   ADD_USER_BANK: "bank/user_bank_add.php",
   WALLET_TO_MT5: "wallettomt5/wallet_to_mt5_api.php",
   WITHDRAW_FUND_BY_CRYPTO: "withdraw/withdrwa_fund_withdraw_crypto_api.php",
@@ -90,3 +90,5 @@ export const USER_NOTIFICATION = {
   READ_NOTIFICATION: "users/read_user_notification.php",
   GET_NOTIFICATION: "users/get_user_notification.php",
 };
+
+// /users/get_admin_bank_details.php

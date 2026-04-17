@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import LoginImage from "../../assets/img/AuthUserPage.jpg";
+import LoginImage from "../../assets/img/AuthUserPage.webp";
 import { useState } from "react";
 import { FaLock, FaKey, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";

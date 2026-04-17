@@ -1,6 +1,6 @@
 import { FaTelegramPlane, FaWhatsapp, FaComments } from "react-icons/fa";
 import { BiSupport } from "react-icons/bi";
-import ChatAgent from "../../assets/img/chat_agent2.png";
+import ChatAgent from "../../assets/img/chat_agent2.webp";
 import { Link } from "react-router-dom";
 import { Hr } from "../Common/Hr";
 

@@ -155,7 +155,7 @@ const UserContextProvider = ({ children }) => {
     }
   };
 
-  // Forgot-password 
+  // Forgot-password
   const ForgotPass = async ({ email }) => {
     try {
       const { data } = await api.post(`${AUTH_API.FORGOT_PASSWORD}`, {
@@ -171,13 +171,13 @@ const UserContextProvider = ({ children }) => {
       console.error("Forgot password error:", error);
     }
   };
-  
-  // date formate 
+
+  // date formate
   const formatDate = (dateString) => {
     const parsedDate = parse(dateString, "dd-MM-yyyy", new Date());
     return format(parsedDate, "yyyy-MM-dd");
   };
-  
+
   // for partner-dashboard
   const becomePartner = async (accept) => {
     setIsLoading(true);
