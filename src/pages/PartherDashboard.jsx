@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
   ProgressStepper,
   PartnerDashboardSection,
@@ -14,31 +14,6 @@ function PartherDashboard() {
   const [userData, setuserData] = useState();
   const [loading, setLoading] = useState(false);
   const { toastOptions } = useUserContext();
-
-  // const getIbDashboard = useCallback(async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     const resp = await api.post(`${PARTNER_DASHBOARD.GET_PARTNER_DASHBOARD}`);
-
-  //     const apiResp = resp.data.data;
-
-  //     if (apiResp?.status === 200) {
-  //       setuserData(apiResp?.response);
-  //     } else {
-  //       toast.error(apiResp?.result, toastOptions);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching IB Dashboard:", error);
-  //     toast.error("Something went wrong!", toastOptions);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [toastOptions, setuserData]);
-
-  // useEffect(() => {
-  //   getIbDashboard();
-  // }, [getIbDashboard]);
 
   const getIbDashboard = async () => {
     setLoading(true);

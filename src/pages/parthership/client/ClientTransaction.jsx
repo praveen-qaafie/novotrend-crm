@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./DateRangePicker.css";
+// import "./DateRangePicker.css";
 import { FiLoader, FiSearch } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import * as XLSX from "xlsx";

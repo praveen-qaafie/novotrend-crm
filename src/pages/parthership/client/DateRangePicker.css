@@ -1,6 +1,6 @@
 /* Custom DateRangePicker Styles */
 .custom-date-range-picker .react-datepicker {
-  border: 1px solid #e5e7eb;
+  /* border: 1px solid #e5e7eb; */
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   font-family: inherit;
@@ -10,7 +10,7 @@
 
 .custom-date-range-picker .react-datepicker__header {
   background-color: white;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: none;
   border-radius: 0.5rem 0.5rem 0 0;
   padding: 1rem;
 }

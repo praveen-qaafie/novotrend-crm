@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../pages/parthership/Rebates/DateRangePicker.css";
 import Pagination from "../components/Common/Pagination";
 import { useUserContext } from "../context/useUserContext";
 import jsPDF from "jspdf";
@@ -459,8 +460,8 @@ const TransactionHistory = () => {
 
                     {isOpen && (
                       <div className="absolute top-full z-10 mt-1 left-0 sm:left-auto sm:right-0  w-full sm:w-auto max-w-sm">
-                        <div className="bg-white border border-gray-300 rounded-lg shadow-lg w-full overflow-x-auto">
-                          <div className="min-w-[320px] p-3">
+                        <div className="">
+                          <div>
                             <DatePicker
                               selected={startDate}
                               onChange={(dates) => {
@@ -477,7 +478,7 @@ const TransactionHistory = () => {
                               monthsShown={1}
                               showMonthDropdown={false}
                               showYearDropdown={false}
-                              calendarClassName="!border-0 !shadow-none"
+                              calendarClassName="custom-date-range-picker"
                               dayClassName={(date) => {
                                 if (startDate && endDate) {
                                   if (date.getTime() === startDate.getTime())

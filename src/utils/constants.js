@@ -28,7 +28,7 @@ export const USER_API = {
   CHECK_MT5_ACC_BALANCE: "accounts/check_mt5_acc_balance.php",
   MT5_TO_WALLET: "mt5towallet/mt5_to_wallet_api.php",
   LINK_AUTH_VERIFY: "link_auth_verify.php",
-  UNLINK_AUTH_VERIFY: "unlink_auth_verify.php",
+  UNLINK_AUTH_VERIFY: "unlink_auth_verify.php", // not using
   LIST_GROUP: "accounts/list_group.php",
   SEND_OTP_EMAIL: "users/send_otp_email.php",
   GET_SUPPORT_TICKET: "support_ticket/get_support_ticket.php",
@@ -54,7 +54,7 @@ export const USER_API = {
   GENERATE_WALLECT_TRON: "deposit/generate_wallet_tron.php",
   WALLET_TRANS_TRC: "wallet_trans_trc.php",
   WALLET_TRANS_BEP: "wallet_trans_bep.php",
-  GET_DISCOUNT: "get_discounts.php",
+  GET_DISCOUNT: "get_discounts.php", // not using
   REGISTER_OTP_VERIFY: "register/register_otp_verify.php",
   ADD_DEPOSIT_BONUS: "deposit/add_deposit_bonus.php",
   GET_ACTIVE_USER_BONUS: "users/get_active_user_bonus.php",
